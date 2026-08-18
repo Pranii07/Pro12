@@ -1,0 +1,85 @@
+# ========================
+# NeuroScreen .gitignore
+# ========================
+
+# --- Environment & Secrets ---
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# --- Node / Frontend ---
+node_modules/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+.eslintcache
+.cache/
+
+# --- Python / Backend ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+.eggs/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+venv/
+.venv/
+env/
+.python-version
+
+# --- ML Models & Data ---
+*.joblib
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.onnx
+ml/models/*.joblib
+ml/models/*.pkl
+ml/datasets/*.csv
+ml/datasets/*.parquet
+!ml/datasets/.gitkeep
+
+# --- Media (never commit raw audio/video) ---
+*.wav
+*.mp3
+*.mp4
+*.webm
+*.avi
+*.mov
+*.ogg
+*.flac
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Docker ---
+docker-compose.override.yml
+
+# --- OS ---
+*.log
+*.tmp
+*.bak
+
+# --- Supabase ---
+.supabase/
+
+# --- Coverage & Testing ---
+coverage/
+htmlcov/
+.coverage
+.pytest_cache/
+.nyc_output/
