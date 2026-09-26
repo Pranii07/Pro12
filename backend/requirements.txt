@@ -1,0 +1,46 @@
+# ===========================================================
+# NeuroScreen — Backend Dependencies (Phase 8)
+# ===========================================================
+# Install only what's needed for the current phase.
+# ML libraries (scikit-learn, xgboost, etc.) added in Phase 9.
+# ===========================================================
+
+# --- Web Framework ---
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+
+# --- Data Validation ---
+pydantic>=2.10.0
+pydantic-settings>=2.7.0
+
+# --- Authentication (JWT) ---
+python-jose[cryptography]>=3.3.0
+
+# --- HTTP Client ---
+httpx>=0.28.0
+
+# --- Supabase ---
+supabase>=2.11.0
+
+# --- File Upload Support ---
+python-multipart>=0.0.18
+
+# --- Audio Processing (Phase 8) ---
+librosa>=0.10.0
+soundfile>=0.13.0
+vosk>=0.3.45
+pydub>=0.25.1
+
+# --- Computer Vision (Phase 8) ---
+opencv-python-headless>=4.9.0
+mediapipe>=0.10.14
+numpy>=1.26.0
+
+# --- ML / Model Training (Phase 9) ---
+scikit-learn>=1.5.0
+xgboost>=2.1.0
+joblib>=1.4.0
+pandas>=2.2.0
+
+# --- PDF Report Generation (Phase 11) ---
+reportlab>=4.2.0

@@ -1,0 +1,146 @@
+{
+  "model_component": "Keystroke Dynamics Behavioral Classifier",
+  "dataset_name": "DSL-StrongPasswordData",
+  "dataset_source": "Killourhy & Maxion (2009) Keystroke Dynamics Benchmark",
+  "training_date": "2026-09-26T07:10:32.862933+00:00",
+  "selected_best_model": "Gradient Boosting",
+  "classes": [
+    "LOW",
+    "MODERATE",
+    "HIGH"
+  ],
+  "feature_columns": [
+    "wpm",
+    "cpm",
+    "accuracy",
+    "backspace_rate",
+    "avg_hold_time_ms",
+    "avg_flight_time_ms"
+  ],
+  "n_samples_total": 20400,
+  "n_train_samples": 16000,
+  "n_test_samples": 4400,
+  "n_train_subjects": 40,
+  "n_test_subjects": 11,
+  "leakage_prevention": "Strict GroupShuffleSplit by subject ID (test subjects never seen in training)",
+  "model_comparison": {
+    "Logistic Regression": {
+      "model_name": "Logistic Regression",
+      "accuracy": 0.9861,
+      "precision_weighted": 0.9863,
+      "recall_weighted": 0.9861,
+      "f1_weighted": 0.9861,
+      "precision_macro": 0.985,
+      "recall_macro": 0.9871,
+      "f1_macro": 0.9859,
+      "confusion_matrix": [
+        [
+          1653,
+          28,
+          0
+        ],
+        [
+          0,
+          1456,
+          33
+        ],
+        [
+          0,
+          0,
+          1230
+        ]
+      ],
+      "cv_f1_mean": 0.9882,
+      "cv_f1_std": 0.0047,
+      "train_time_sec": 0.19,
+      "inference_time_sec": 0.001,
+      "feature_importance": {
+        "wpm": 6.6815,
+        "cpm": 6.6815,
+        "accuracy": 1.8532,
+        "backspace_rate": 0.5776,
+        "avg_hold_time_ms": 1.5668,
+        "avg_flight_time_ms": 4.78
+      }
+    },
+    "Random Forest": {
+      "model_name": "Random Forest",
+      "accuracy": 0.9955,
+      "precision_weighted": 0.9955,
+      "recall_weighted": 0.9955,
+      "f1_weighted": 0.9955,
+      "precision_macro": 0.9953,
+      "recall_macro": 0.9955,
+      "f1_macro": 0.9954,
+      "confusion_matrix": [
+        [
+          1674,
+          7,
+          0
+        ],
+        [
+          2,
+          1480,
+          7
+        ],
+        [
+          0,
+          4,
+          1226
+        ]
+      ],
+      "cv_f1_mean": 0.9934,
+      "cv_f1_std": 0.0026,
+      "train_time_sec": 0.7,
+      "inference_time_sec": 0.0681,
+      "feature_importance": {
+        "wpm": 0.365,
+        "cpm": 0.3415,
+        "accuracy": 0.1363,
+        "backspace_rate": 0.0225,
+        "avg_hold_time_ms": 0.0062,
+        "avg_flight_time_ms": 0.1286
+      }
+    },
+    "Gradient Boosting": {
+      "model_name": "Gradient Boosting",
+      "accuracy": 0.9968,
+      "precision_weighted": 0.9968,
+      "recall_weighted": 0.9968,
+      "f1_weighted": 0.9968,
+      "precision_macro": 0.9969,
+      "recall_macro": 0.9967,
+      "f1_macro": 0.9968,
+      "confusion_matrix": [
+        [
+          1676,
+          5,
+          0
+        ],
+        [
+          2,
+          1486,
+          1
+        ],
+        [
+          0,
+          6,
+          1224
+        ]
+      ],
+      "cv_f1_mean": 0.9953,
+      "cv_f1_std": 0.002,
+      "train_time_sec": 15.34,
+      "inference_time_sec": 0.0227,
+      "feature_importance": {
+        "wpm": 0.3764,
+        "cpm": 0.6003,
+        "accuracy": 0.0022,
+        "backspace_rate": 0.0157,
+        "avg_hold_time_ms": 0.0018,
+        "avg_flight_time_ms": 0.0036
+      }
+    }
+  },
+  "disclaimer": "This keystroke dynamics model evaluates motor timing fluency and rhythm characteristics as part of an educational/research multi-modal screening prototype. It does NOT diagnose Parkinson's disease or any clinical neurological disorder."
+}

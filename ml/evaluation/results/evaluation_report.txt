@@ -1,0 +1,46 @@
+============================================================
+NeuroScreen — Evaluation Report
+============================================================
+
+⚠️  Research/Educational Prototype — trained and evaluated
+    on synthetic data. Not clinically validated.
+
+Model: SVM
+Model Version: 1.0.0
+Training Date: 2026-09-16T13:44:40.381857+00:00
+Dataset: Synthetic (2000 samples)
+Test Set: 400 samples (20%)
+
+--- Metrics ---
+Accuracy:   0.9425
+Precision:  0.9420
+Recall:     0.9425
+F1:         0.9421
+ROC-AUC:    0.9886
+
+--- Classification Report ---
+              precision    recall  f1-score   support
+
+         LOW     0.9614    0.9851    0.9731       202
+    MODERATE     0.9115    0.8879    0.8996       116
+        HIGH     0.9375    0.9146    0.9259        82
+
+    accuracy                         0.9425       400
+   macro avg     0.9368    0.9292    0.9329       400
+weighted avg     0.9420    0.9425    0.9421       400
+
+--- Confusion Matrix ---
+[[199   3   0]
+ [  8 103   5]
+ [  0   7  75]]
+
+--- Cross-Validation (5-Fold F1 Weighted) ---
+Scores: [0.9448, 0.9496, 0.9475, 0.9398, 0.9378]
+Mean:   0.9439 ± 0.0045
+
+--- Model Comparison ---
+Model             Accuracy         F1    ROC-AUC   CV F1 Mean
+---------------------------------------------------------
+RandomForest        0.9275     0.9270     0.9892       0.9380
+SVM                 0.9425     0.9421     0.9886       0.9439 ← BEST
+XGBoost             0.9375     0.9366     0.9922       0.9367

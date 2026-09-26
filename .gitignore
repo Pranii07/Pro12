@@ -44,6 +44,7 @@ ml/models/*.joblib
 ml/models/*.pkl
 ml/datasets/*.csv
 ml/datasets/*.parquet
+ml/datasets/FacialDataSets/
 !ml/datasets/.gitkeep
 
 # --- Media (never commit raw audio/video) ---
