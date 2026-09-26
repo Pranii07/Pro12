@@ -171,7 +171,7 @@ export const MODULE_INFO: Record<ModuleType, ModuleInfo> = {
   memory: {
     type: 'memory',
     name: 'Memory Tests',
-    description: 'Tests word recall, number recall, image memory, and pattern recognition.',
+    description: 'Tests word recall, number recall, and image memory matching game.',
     icon: 'Brain',
     requiresHardware: 'none',
     isOptional: true,

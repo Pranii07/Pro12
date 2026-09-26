@@ -7,10 +7,11 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { History, Plus, Search, Loader2 } from 'lucide-react'
+import { History, Plus, Search, Loader2, Shield } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
+import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
@@ -31,6 +32,7 @@ const FILTERS: { key: StatusFilter; label: string }[] = [
 ]
 
 export function AssessmentsPage() {
+  const { isAdmin } = useAuth()
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [search, setSearch] = useState('')
 
@@ -62,15 +64,24 @@ export function AssessmentsPage() {
         transition={{ duration: 0.3 }}
       >
         <PageHeader
-          title="Assessment History"
-          description="View and manage your past behavioural assessment sessions"
+          title={isAdmin ? "Patient Assessments Surveillance" : "Assessment History"}
+          description={isAdmin ? "Inspect and review behavioural assessment sessions across the platform" : "View and manage your past behavioural assessment sessions"}
         >
-          <Link to="/dashboard/new-assessment">
-            <Button className="gap-2" size="sm">
-              <Plus className="size-4" />
-              New Assessment
-            </Button>
-          </Link>
+          {isAdmin ? (
+            <Link to="/dashboard/admin?tab=assessments">
+              <Button className="gap-2" size="sm">
+                <Shield className="size-4" />
+                Admin Console
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/dashboard/new-assessment">
+              <Button className="gap-2" size="sm">
+                <Plus className="size-4" />
+                New Assessment
+              </Button>
+            </Link>
+          )}
         </PageHeader>
       </motion.div>
 
@@ -170,20 +181,31 @@ export function AssessmentsPage() {
             <Card>
               <CardContent className="py-8">
                 <EmptyState
-                  title={search ? 'No matching assessments' : 'No assessments yet'}
+                  title={search ? 'No matching assessments' : (isAdmin ? 'No assessments recorded yet' : 'No assessments yet')}
                   description={
                     search
                       ? `No assessments found matching "${search}".`
-                      : 'Start your first assessment to begin tracking your behavioural patterns over time.'
+                      : (isAdmin
+                          ? 'No patient assessments have been submitted to the platform yet.'
+                          : 'Start your first assessment to begin tracking your behavioural patterns over time.')
                   }
                   action={
                     !search ? (
-                      <Link to="/dashboard/new-assessment">
-                        <Button className="gap-2">
-                          <Plus className="size-4" />
-                          Start Your First Assessment
-                        </Button>
-                      </Link>
+                      isAdmin ? (
+                        <Link to="/dashboard/admin?tab=assessments">
+                          <Button className="gap-2">
+                            <Shield className="size-4" />
+                            Admin Console
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Link to="/dashboard/new-assessment">
+                          <Button className="gap-2">
+                            <Plus className="size-4" />
+                            Start Your First Assessment
+                          </Button>
+                        </Link>
+                      )
                     ) : undefined
                   }
                 />

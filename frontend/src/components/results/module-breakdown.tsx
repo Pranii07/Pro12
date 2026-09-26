@@ -69,7 +69,7 @@ const FEATURE_DISPLAY: Record<ModuleType, { key: string; label: string; unit: st
   ],
   memory: [
     { key: 'word_recall_accuracy', label: 'Word Recall', unit: '%', direction: 'up' },
-    { key: 'pattern_accuracy', label: 'Patterns', unit: '%', direction: 'up' },
+    { key: 'pattern_accuracy', label: 'Image Memory', unit: '%', direction: 'up' },
     { key: 'avg_response_time_ms', label: 'Avg Response', unit: 'ms', direction: 'down' },
   ],
   reaction: [

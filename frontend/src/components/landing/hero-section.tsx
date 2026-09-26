@@ -4,13 +4,13 @@
 
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles, Shield } from 'lucide-react'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { PrototypeBanner } from '@/components/ui/disclaimer-banner'
 
 export function HeroSection() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isAdmin } = useAuth()
   return (
     <section className="relative overflow-hidden">
       {/* Background gradient orbs */}
@@ -65,12 +65,22 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
           >
-            <Link to={isAuthenticated ? '/dashboard/new-assessment' : '/register'}>
-              <Button size="lg" className="gap-2 px-8 text-base">
-                Start Assessment
-                <ArrowRight className="size-4" />
-              </Button>
-            </Link>
+            {isAdmin ? (
+              <Link to="/dashboard/admin">
+                <Button size="lg" className="gap-2 px-8 text-base shadow-md shadow-primary/20">
+                  <Shield className="size-5" />
+                  Admin Console
+                  <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+            ) : (
+              <Link to={isAuthenticated ? '/dashboard/new-assessment' : '/register'}>
+                <Button size="lg" className="gap-2 px-8 text-base">
+                  Start Assessment
+                  <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+            )}
             <a href="#how-it-works">
               <Button variant="outline" size="lg" className="px-8 text-base">
                 Learn How It Works

@@ -1,11 +1,10 @@
 // ===========================================================
 // NeuroScreen — Memory Tests Module
 // ===========================================================
-// Four sub-tests:
+// Three sub-tests:
 //   1. Word Recall — show words, then recall them
 //   2. Number Recall — show number sequence, type it back
-//   3. Visual Pattern — show grid pattern, recreate it
-//   4. Pattern Sequence — show colour sequence, repeat it
+//   3. Image Memory Game — match 6 pairs of illustrated cards
 //
 // Metrics: per-test accuracy, average completion time
 // ===========================================================
@@ -24,8 +23,9 @@ import {
   Clock,
   Hash,
   Type,
-  Grid3X3,
-  Palette,
+  Grid2X2,
+  Sparkles,
+  Trophy,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -36,7 +36,7 @@ import { cn } from '@/lib/utils'
 import type { LanguageCode } from '@/types/database'
 
 // -------------------------------------------------------
-// Test Data
+// Test Data: Word Recall & Number Sequences
 // -------------------------------------------------------
 
 const WORD_LISTS: Record<LanguageCode, string[][]> = {
@@ -58,47 +58,6 @@ const NUMBER_SEQUENCES = [
   [4, 2, 8, 5, 1, 7, 3],
 ]
 
-// 5x5 grid patterns (1 = filled, 0 = empty)
-const GRID_PATTERNS = [
-  [
-    [1, 0, 1, 0, 1],
-    [0, 1, 0, 1, 0],
-    [1, 0, 1, 0, 1],
-    [0, 1, 0, 1, 0],
-    [1, 0, 1, 0, 1],
-  ],
-  [
-    [1, 1, 0, 0, 0],
-    [1, 1, 1, 0, 0],
-    [0, 1, 1, 1, 0],
-    [0, 0, 1, 1, 1],
-    [0, 0, 0, 1, 1],
-  ],
-  [
-    [0, 0, 1, 0, 0],
-    [0, 1, 1, 1, 0],
-    [1, 1, 1, 1, 1],
-    [0, 1, 1, 1, 0],
-    [0, 0, 1, 0, 0],
-  ],
-]
-
-// Colour sequences
-const SEQUENCE_COLORS = ['red', 'blue', 'green', 'yellow', 'purple']
-const COLOR_SEQUENCES = [
-  [0, 2, 1, 3],
-  [4, 1, 0, 3, 2],
-  [2, 0, 4, 1, 3, 0],
-]
-
-const COLOR_CLASS_MAP: Record<string, { bg: string; ring: string }> = {
-  red:    { bg: 'bg-red-500', ring: 'ring-red-500' },
-  blue:   { bg: 'bg-blue-500', ring: 'ring-blue-500' },
-  green:  { bg: 'bg-green-500', ring: 'ring-green-500' },
-  yellow: { bg: 'bg-yellow-400', ring: 'ring-yellow-400' },
-  purple: { bg: 'bg-purple-500', ring: 'ring-purple-500' },
-}
-
 // -------------------------------------------------------
 // Types
 // -------------------------------------------------------
@@ -110,7 +69,7 @@ interface MemoryModuleProps {
 }
 
 type Phase = 'instructions' | 'testing' | 'results'
-type SubTest = 'words' | 'numbers' | 'pattern' | 'sequence'
+type SubTest = 'words' | 'numbers' | 'images'
 
 interface SubTestResult {
   type: SubTest
@@ -121,13 +80,12 @@ interface SubTestResult {
 interface MemoryMetrics {
   wordRecallAccuracy: number
   numberRecallAccuracy: number
-  patternMemoryAccuracy: number
-  sequenceMemoryAccuracy: number
+  imageMemoryAccuracy: number
   avgCompletionTimeMs: number
 }
 
 // -------------------------------------------------------
-// Component
+// Main Component
 // -------------------------------------------------------
 
 export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps) {
@@ -139,7 +97,7 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
   const [isSubmitting, setIsSubmitting] = useState(false)
   const moduleStartRef = useRef(0)
 
-  const TEST_ORDER: SubTest[] = ['words', 'numbers', 'pattern', 'sequence']
+  const TEST_ORDER: SubTest[] = ['words', 'numbers', 'images']
 
   const handleStart = useCallback(() => {
     setPhase('testing')
@@ -158,16 +116,14 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
         // All tests done — compute metrics
         const wordResult = updated.find((r) => r.type === 'words')
         const numResult = updated.find((r) => r.type === 'numbers')
-        const patResult = updated.find((r) => r.type === 'pattern')
-        const seqResult = updated.find((r) => r.type === 'sequence')
+        const imgResult = updated.find((r) => r.type === 'images')
 
         const avgTime = updated.reduce((sum, r) => sum + r.completionTimeMs, 0) / updated.length
 
         setMetrics({
           wordRecallAccuracy: wordResult?.accuracy ?? 0,
           numberRecallAccuracy: numResult?.accuracy ?? 0,
-          patternMemoryAccuracy: patResult?.accuracy ?? 0,
-          sequenceMemoryAccuracy: seqResult?.accuracy ?? 0,
+          imageMemoryAccuracy: imgResult?.accuracy ?? 0,
           avgCompletionTimeMs: Math.round(avgTime),
         })
         setPhase('results')
@@ -188,9 +144,8 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
     const overallAccuracy = (
       metrics.wordRecallAccuracy +
       metrics.numberRecallAccuracy +
-      metrics.patternMemoryAccuracy +
-      metrics.sequenceMemoryAccuracy
-    ) / 4
+      metrics.imageMemoryAccuracy
+    ) / 3
 
     const score = Math.round(overallAccuracy)
     const totalTime = (performance.now() - moduleStartRef.current) / 1000
@@ -198,9 +153,11 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
     const features = {
       word_recall_accuracy: metrics.wordRecallAccuracy,
       number_recall_accuracy: metrics.numberRecallAccuracy,
-      image_memory_accuracy: metrics.patternMemoryAccuracy,
-      pattern_memory_accuracy: metrics.sequenceMemoryAccuracy,
+      image_memory_accuracy: metrics.imageMemoryAccuracy,
+      pattern_accuracy: metrics.imageMemoryAccuracy, // Backwards-compatible alias for ML models
+      pattern_memory_accuracy: metrics.imageMemoryAccuracy,
       avg_completion_time_ms: metrics.avgCompletionTimeMs,
+      avg_response_time_ms: metrics.avgCompletionTimeMs,
     }
 
     onComplete(features, score, Math.round(totalTime * 10) / 10)
@@ -254,12 +211,8 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
                   {t(language, 'memory.test.numbers')}
                 </li>
                 <li className="flex items-center gap-2">
-                  <Grid3X3 className="size-4 text-purple-500" />
-                  {t(language, 'memory.test.pattern')}
-                </li>
-                <li className="flex items-center gap-2">
-                  <Palette className="size-4 text-purple-500" />
-                  {t(language, 'memory.test.sequence')}
+                  <Grid2X2 className="size-4 text-purple-500" />
+                  {t(language, 'memory.test.images')}
                 </li>
               </ul>
             </div>
@@ -319,11 +272,8 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
           {currentTest === 'numbers' && (
             <NumberRecallTest key="numbers" language={language} onComplete={handleSubTestComplete} />
           )}
-          {currentTest === 'pattern' && (
-            <PatternMemoryTest key="pattern" language={language} onComplete={handleSubTestComplete} />
-          )}
-          {currentTest === 'sequence' && (
-            <SequenceMemoryTest key="sequence" language={language} onComplete={handleSubTestComplete} />
+          {currentTest === 'images' && (
+            <ImageMemoryGameTest key="images" language={language} onComplete={handleSubTestComplete} />
           )}
         </AnimatePresence>
       </motion.div>
@@ -356,11 +306,10 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <MetricCard label={t(language, 'memory.results.words')} value={`${metrics.wordRecallAccuracy}`} unit="%" color="text-purple-500" />
               <MetricCard label={t(language, 'memory.results.numbers')} value={`${metrics.numberRecallAccuracy}`} unit="%" color="text-purple-500" />
-              <MetricCard label={t(language, 'memory.results.pattern')} value={`${metrics.patternMemoryAccuracy}`} unit="%" color="text-purple-500" />
-              <MetricCard label={t(language, 'memory.results.sequence')} value={`${metrics.sequenceMemoryAccuracy}`} unit="%" color="text-purple-500" />
+              <MetricCard label={t(language, 'memory.results.images')} value={`${metrics.imageMemoryAccuracy}`} unit="%" color="text-purple-500" />
             </div>
             <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
               <Clock className="size-4" />
@@ -386,7 +335,7 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
 }
 
 // ===============================================================
-// Sub-test: Word Recall
+// Sub-test 1: Word Recall
 // ===============================================================
 
 function WordRecallTest({
@@ -403,7 +352,6 @@ function WordRecallTest({
   const [countdown, setCountdown] = useState(5)
   const startTimeRef = useRef(0)
 
-  // Show words for 5 seconds, then switch to recall
   useEffect(() => {
     if (showPhase !== 'show') return
     const timer = setInterval(() => {
@@ -421,9 +369,14 @@ function WordRecallTest({
   }, [showPhase])
 
   const handleSubmit = () => {
-    const recalled = input.toLowerCase().split(/[\s,]+/).filter(Boolean)
-    const correct = words.filter((w) => recalled.includes(w.toLowerCase()))
-    const accuracy = Math.round((correct.length / words.length) * 100)
+    const recalled = input
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .map((w) => w.trim())
+      .filter(Boolean)
+    const uniqueRecalled = [...new Set(recalled)]
+    const correct = uniqueRecalled.filter((w) => words.map((orig) => orig.toLowerCase()).includes(w)).length
+    const accuracy = Math.round((correct / words.length) * 100)
     const completionTimeMs = Math.round(performance.now() - startTimeRef.current)
     onComplete({ type: 'words', accuracy, completionTimeMs })
   }
@@ -441,14 +394,14 @@ function WordRecallTest({
                 </div>
                 <Badge variant="outline" className="font-mono">{countdown}s</Badge>
               </div>
-              <div className="flex flex-wrap gap-3 justify-center py-6">
+              <div className="grid grid-cols-3 gap-3 py-6">
                 {words.map((word, idx) => (
                   <motion.div
                     key={word}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="rounded-xl border-2 border-purple-500/20 bg-purple-500/5 px-5 py-3 text-lg font-semibold"
+                    className="flex h-14 items-center justify-center rounded-xl border-2 border-purple-500/20 bg-purple-500/5 text-lg font-semibold capitalize"
                   >
                     {word}
                   </motion.div>
@@ -466,7 +419,7 @@ function WordRecallTest({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t(language, 'memory.words.placeholder')}
-                className="font-mono"
+                className="text-base"
                 autoFocus
               />
               <Button onClick={handleSubmit} className="w-full gap-2" disabled={!input.trim()}>
@@ -482,7 +435,7 @@ function WordRecallTest({
 }
 
 // ===============================================================
-// Sub-test: Number Recall
+// Sub-test 2: Number Recall
 // ===============================================================
 
 function NumberRecallTest({
@@ -495,7 +448,7 @@ function NumberRecallTest({
   const [sequence] = useState(() => NUMBER_SEQUENCES[Math.floor(Math.random() * NUMBER_SEQUENCES.length)])
   const [showPhase, setShowPhase] = useState<'show' | 'recall'>('show')
   const [input, setInput] = useState('')
-  const [countdown, setCountdown] = useState(4)
+  const [countdown, setCountdown] = useState(5)
   const startTimeRef = useRef(0)
 
   useEffect(() => {
@@ -579,277 +532,324 @@ function NumberRecallTest({
 }
 
 // ===============================================================
-// Sub-test: Visual Pattern Memory (5x5 grid)
+// Sub-test 3: Image Memory Game (12 Cards / 6 Pairs)
 // ===============================================================
 
-function PatternMemoryTest({
-  language,
-  onComplete,
-}: {
-  language: LanguageCode
-  onComplete: (result: SubTestResult) => void
-}) {
-  const [pattern] = useState(() => GRID_PATTERNS[Math.floor(Math.random() * GRID_PATTERNS.length)])
-  const [showPhase, setShowPhase] = useState<'show' | 'recall'>('show')
-  const [userGrid, setUserGrid] = useState<number[][]>(() =>
-    Array.from({ length: 5 }, () => Array(5).fill(0))
-  )
-  const [countdown, setCountdown] = useState(5)
-  const startTimeRef = useRef(0)
-
-  useEffect(() => {
-    if (showPhase !== 'show') return
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          setShowPhase('recall')
-          startTimeRef.current = performance.now()
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [showPhase])
-
-  const toggleCell = (row: number, col: number) => {
-    setUserGrid((prev) =>
-      prev.map((r, ri) =>
-        ri === row ? r.map((c, ci) => (ci === col ? (c === 1 ? 0 : 1) : c)) : r
-      )
-    )
-  }
-
-  const handleSubmit = () => {
-    let correct = 0
-    let total = 0
-    for (let r = 0; r < 5; r++) {
-      for (let c = 0; c < 5; c++) {
-        total++
-        if (userGrid[r][c] === pattern[r][c]) correct++
-      }
-    }
-    const accuracy = Math.round((correct / total) * 100)
-    const completionTimeMs = Math.round(performance.now() - startTimeRef.current)
-    onComplete({ type: 'pattern', accuracy, completionTimeMs })
-  }
-
-  const renderGrid = (grid: number[][], interactive: boolean) => (
-    <div className="inline-grid grid-cols-5 gap-1.5">
-      {grid.map((row, ri) =>
-        row.map((cell, ci) => (
-          <motion.button
-            key={`${ri}-${ci}`}
-            type="button"
-            className={cn(
-              'size-10 rounded-lg border-2 transition-all sm:size-12',
-              cell === 1
-                ? 'border-purple-500 bg-purple-500 shadow-md shadow-purple-500/20'
-                : 'border-border bg-muted/50 hover:border-purple-500/50',
-              interactive && 'cursor-pointer active:scale-95',
-              !interactive && 'cursor-default',
-            )}
-            onClick={() => interactive && toggleCell(ri, ci)}
-            whileTap={interactive ? { scale: 0.9 } : undefined}
-            disabled={!interactive}
-          />
-        ))
-      )}
-    </div>
-  )
-
+// SVG Components matching the uploaded image items
+function SunglassesSvg({ className = 'w-10 h-10' }: { className?: string }) {
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-      <Card>
-        <CardContent className="p-6 space-y-4">
-          {showPhase === 'show' ? (
-            <>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Eye className="size-4 text-purple-500" />
-                  <span className="font-medium">{t(language, 'memory.pattern.memorize')}</span>
-                </div>
-                <Badge variant="outline" className="font-mono">{countdown}s</Badge>
-              </div>
-              <div className="flex justify-center py-4">
-                {renderGrid(pattern, false)}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center gap-2">
-                <Grid3X3 className="size-4 text-purple-500" />
-                <span className="font-medium">{t(language, 'memory.pattern.recall')}</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{t(language, 'memory.pattern.recallHint')}</p>
-              <div className="flex justify-center py-4">
-                {renderGrid(userGrid, true)}
-              </div>
-              <Button onClick={handleSubmit} className="w-full gap-2">
-                <ArrowRight className="size-4" />
-                {t(language, 'memory.next')}
-              </Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
+    <svg viewBox="0 0 100 64" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="10" width="96" height="44" rx="22" fill="white" stroke="#111827" strokeWidth="4" />
+      <circle cx="28" cy="32" r="16" fill="#7c3aed" stroke="#111827" strokeWidth="4" />
+      <path d="M 18 24 A 12 12 0 0 1 34 20" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+      <circle cx="72" cy="32" r="16" fill="#7c3aed" stroke="#111827" strokeWidth="4" />
+      <path d="M 62 24 A 12 12 0 0 1 78 20" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+      <path d="M 44 30 Q 50 24 56 30" stroke="#111827" strokeWidth="4" strokeLinecap="round" fill="none" />
+      <path d="M 12 28 L 4 30" stroke="#111827" strokeWidth="4" strokeLinecap="round" />
+      <path d="M 88 28 L 96 30" stroke="#111827" strokeWidth="4" strokeLinecap="round" />
+    </svg>
   )
 }
 
-// ===============================================================
-// Sub-test: Colour Sequence Memory
-// ===============================================================
+function PopsicleSvg({ className = 'w-10 h-10' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 70 90" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(35 35 45)">
+        <rect x="30" y="52" width="10" height="26" rx="5" fill="#d97706" stroke="#111827" strokeWidth="4" />
+        <path d="M 18 20 C 18 8 52 8 52 20 L 52 56 C 52 60 18 60 18 56 Z" fill="white" stroke="#111827" strokeWidth="6" strokeLinejoin="round" />
+        <path d="M 21 20 C 21 12 49 12 49 20 L 49 54 C 49 57 21 57 21 54 Z" fill="#4ade80" stroke="#111827" strokeWidth="3.5" />
+        <path d="M 26 20 L 26 48" stroke="#dcfce7" strokeWidth="3.5" strokeLinecap="round" />
+      </g>
+    </svg>
+  )
+}
 
-function SequenceMemoryTest({
+function UmbrellaSvg({ className = 'w-10 h-10' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 90 90" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(-30 45 45)">
+        <path d="M 45 28 L 45 74 C 45 80 37 80 37 75" stroke="#111827" strokeWidth="5" strokeLinecap="round" fill="none" />
+        <path d="M 12 48 C 12 22 78 22 78 48 Z" fill="white" stroke="#111827" strokeWidth="7" strokeLinejoin="round" />
+        <path d="M 14 48 C 14 26 31 29 33 48 Z" fill="#ec4899" stroke="#111827" strokeWidth="3" />
+        <path d="M 33 48 C 31 29 45 24 45 48 Z" fill="#facc15" stroke="#111827" strokeWidth="3" />
+        <path d="M 45 48 C 45 24 59 29 57 48 Z" fill="#a855f7" stroke="#111827" strokeWidth="3" />
+        <path d="M 57 48 C 59 29 76 26 76 48 Z" fill="#f43f5e" stroke="#111827" strokeWidth="3" />
+        <circle cx="45" cy="22" r="3.5" fill="#111827" />
+      </g>
+    </svg>
+  )
+}
+
+function SeashellSvg({ className = 'w-10 h-10' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 90 90" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(-15 45 45)">
+        <path d="M 22 60 C 10 38 24 16 48 16 C 72 16 84 38 72 62 L 60 70 L 32 70 Z" fill="white" stroke="#111827" strokeWidth="7" strokeLinejoin="round" />
+        <path d="M 25 58 C 15 38 27 20 48 20 C 69 20 78 38 68 60 Z" fill="#38bdf8" stroke="#111827" strokeWidth="3.5" />
+        <path d="M 48 20 L 46 66" stroke="#0369a1" strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M 37 24 L 41 66" stroke="#0284c7" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 59 24 L 51 66" stroke="#0284c7" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 28 36 L 37 66" stroke="#075985" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 68 36 L 55 66" stroke="#075985" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 32 64 L 60 64 L 54 71 L 38 71 Z" fill="#8b5cf6" stroke="#111827" strokeWidth="3.5" strokeLinejoin="round" />
+      </g>
+    </svg>
+  )
+}
+
+function BeachBallSvg({ className = 'w-10 h-10' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 90 90" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="45" cy="45" r="37" fill="white" stroke="#111827" strokeWidth="7" />
+      <circle cx="45" cy="45" r="34" fill="#f8fafc" stroke="#111827" strokeWidth="3.5" />
+      <path d="M 45 45 L 45 11 A 34 34 0 0 1 74 27 Z" fill="#ec4899" stroke="#111827" strokeWidth="3" />
+      <path d="M 45 45 L 74 27 A 34 34 0 0 1 78 52 Z" fill="#38bdf8" stroke="#111827" strokeWidth="3" />
+      <path d="M 45 45 L 78 52 A 34 34 0 0 1 55 78 Z" fill="#fbbf24" stroke="#111827" strokeWidth="3" />
+      <path d="M 45 45 L 55 78 A 34 34 0 0 1 21 70 Z" fill="#ec4899" stroke="#111827" strokeWidth="3" />
+      <path d="M 45 45 L 21 70 A 34 34 0 0 1 12 39 Z" fill="#38bdf8" stroke="#111827" strokeWidth="3" />
+      <path d="M 45 45 L 12 39 A 34 34 0 0 1 45 11 Z" fill="#fbbf24" stroke="#111827" strokeWidth="3" />
+      <circle cx="45" cy="45" r="7" fill="white" stroke="#111827" strokeWidth="3" />
+    </svg>
+  )
+}
+
+function WatermelonSvg({ className = 'w-10 h-10' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 90 84" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 10 56 Q 45 80 80 56 L 45 10 Z" fill="white" stroke="#111827" strokeWidth="7" strokeLinejoin="round" />
+      <path d="M 13 55 Q 45 76 77 55 L 73 48 Q 45 68 17 48 Z" fill="#22c55e" stroke="#111827" strokeWidth="3" />
+      <path d="M 16 50 Q 45 70 74 50 L 71 46 Q 45 64 19 46 Z" fill="#bbf7d0" />
+      <path d="M 20 46 Q 45 64 70 46 L 45 15 Z" fill="#f43f5e" stroke="#111827" strokeWidth="3" />
+      <ellipse cx="38" cy="38" rx="2" ry="3.5" fill="#111827" />
+      <ellipse cx="52" cy="38" rx="2" ry="3.5" fill="#111827" />
+      <ellipse cx="45" cy="27" rx="2" ry="3.5" fill="#111827" />
+      <ellipse cx="45" cy="47" rx="2" ry="3.5" fill="#111827" />
+      <ellipse cx="32" cy="46" rx="2" ry="3.5" fill="#111827" />
+      <ellipse cx="58" cy="46" rx="2" ry="3.5" fill="#111827" />
+    </svg>
+  )
+}
+
+type CardType = 'sunglasses' | 'popsicle' | 'umbrella' | 'seashell' | 'beachball' | 'watermelon'
+
+interface GameCard {
+  id: number
+  type: CardType
+  label: string
+  bgColor: string
+  Icon: React.ComponentType<{ className?: string }>
+  isFlipped: boolean
+  isMatched: boolean
+}
+
+const CARD_PROTOTYPES: { type: CardType; label: string; bgColor: string; Icon: React.ComponentType<{ className?: string }> }[] = [
+  { type: 'sunglasses', label: 'Sunglasses', bgColor: 'bg-[#5cb85c]', Icon: SunglassesSvg },
+  { type: 'popsicle',   label: 'Popsicle',   bgColor: 'bg-[#6f5499]', Icon: PopsicleSvg },
+  { type: 'umbrella',   label: 'Umbrella',   bgColor: 'bg-[#d9534f]', Icon: UmbrellaSvg },
+  { type: 'seashell',   label: 'Seashell',   bgColor: 'bg-[#a89f91]', Icon: SeashellSvg },
+  { type: 'beachball',  label: 'Beach Ball', bgColor: 'bg-[#f0ad4e]', Icon: BeachBallSvg },
+  { type: 'watermelon', label: 'Watermelon', bgColor: 'bg-[#5bc0de]', Icon: WatermelonSvg },
+]
+
+function createShuffledDeck(): GameCard[] {
+  const deck: GameCard[] = []
+  let idCounter = 0
+  for (const proto of CARD_PROTOTYPES) {
+    deck.push({ ...proto, id: idCounter++, isFlipped: false, isMatched: false })
+    deck.push({ ...proto, id: idCounter++, isFlipped: false, isMatched: false })
+  }
+  // Fisher-Yates shuffle
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[deck[i], deck[j]] = [deck[j], deck[i]]
+  }
+  return deck
+}
+
+function ImageMemoryGameTest({
   language,
   onComplete,
 }: {
   language: LanguageCode
   onComplete: (result: SubTestResult) => void
 }) {
-  const [sequence] = useState(() => COLOR_SEQUENCES[Math.floor(Math.random() * COLOR_SEQUENCES.length)])
-  const [showPhase, setShowPhase] = useState<'show' | 'recall'>('show')
-  const [highlightIdx, setHighlightIdx] = useState(-1)
-  const [userSequence, setUserSequence] = useState<number[]>([])
+  const [cards, setCards] = useState<GameCard[]>(() => createShuffledDeck())
+  const [flippedIndices, setFlippedIndices] = useState<number[]>([])
+  const [matchedPairs, setMatchedPairs] = useState(0)
+  const [moves, setMoves] = useState(0)
+  const [isLocked, setIsLocked] = useState(false)
+  const [isGameFinished, setIsGameFinished] = useState(false)
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const startTimeRef = useRef(0)
 
-  // Animate the sequence playback
+  // Start timer on mount
   useEffect(() => {
-    if (showPhase !== 'show') return
-    let idx = 0
-    const interval = setInterval(() => {
-      if (idx < sequence.length) {
-        setHighlightIdx(idx)
-        idx++
-      } else {
-        clearInterval(interval)
-        // Brief pause, then switch to recall
-        setTimeout(() => {
-          setHighlightIdx(-1)
-          setShowPhase('recall')
-          startTimeRef.current = performance.now()
-        }, 600)
-      }
-    }, 800)
-    return () => clearInterval(interval)
-  }, [showPhase, sequence])
+    startTimeRef.current = performance.now()
+    const timer = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1)
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
-  const handleColorClick = (colorIdx: number) => {
-    const next = [...userSequence, colorIdx]
-    setUserSequence(next)
-    if (next.length >= sequence.length) {
-      // Auto-submit
-      let correct = 0
-      for (let i = 0; i < sequence.length; i++) {
-        if (next[i] === sequence[i]) correct++
+  // Card click handler
+  const handleCardClick = (index: number) => {
+    if (isLocked) return
+    if (cards[index].isFlipped || cards[index].isMatched) return
+
+    // Flip the clicked card
+    const updatedCards = [...cards]
+    updatedCards[index] = { ...updatedCards[index], isFlipped: true }
+    setCards(updatedCards)
+
+    const newFlipped = [...flippedIndices, index]
+    setFlippedIndices(newFlipped)
+
+    if (newFlipped.length === 2) {
+      setMoves((m) => m + 1)
+      setIsLocked(true)
+
+      const [firstIdx, secondIdx] = newFlipped
+      const firstCard = updatedCards[firstIdx]
+      const secondCard = updatedCards[secondIdx]
+
+      if (firstCard.type === secondCard.type) {
+        // MATCH FOUND
+        setTimeout(() => {
+          setCards((prev) =>
+            prev.map((c, i) =>
+              i === firstIdx || i === secondIdx ? { ...c, isMatched: true } : c
+            )
+          )
+          setFlippedIndices([])
+          setIsLocked(false)
+          setMatchedPairs((mp) => {
+            const nextCount = mp + 1
+            if (nextCount === 6) {
+              // Game Won!
+              finishGame(moves + 1)
+            }
+            return nextCount
+          })
+        }, 300)
+      } else {
+        // MISMATCH — flip back after brief pause
+        setTimeout(() => {
+          setCards((prev) =>
+            prev.map((c, i) =>
+              i === firstIdx || i === secondIdx ? { ...c, isFlipped: false } : c
+            )
+          )
+          setFlippedIndices([])
+          setIsLocked(false)
+        }, 900)
       }
-      const accuracy = Math.round((correct / sequence.length) * 100)
-      const completionTimeMs = Math.round(performance.now() - startTimeRef.current)
-      onComplete({ type: 'sequence', accuracy, completionTimeMs })
     }
   }
 
-  const handleUndo = () => {
-    setUserSequence((prev) => prev.slice(0, -1))
+  const finishGame = (totalMoves: number) => {
+    setIsGameFinished(true)
+    const completionTimeMs = Math.round(performance.now() - startTimeRef.current)
+    // 6 pairs: optimal moves = 6. Accuracy decreases as moves increase.
+    const accuracy = Math.max(20, Math.min(100, Math.round((6 / Math.max(6, totalMoves)) * 100)))
+
+    setTimeout(() => {
+      onComplete({ type: 'images', accuracy, completionTimeMs })
+    }, 1400)
   }
 
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-      <Card>
-        <CardContent className="p-6 space-y-4">
-          {showPhase === 'show' ? (
-            <>
-              <div className="flex items-center gap-2">
-                <Eye className="size-4 text-purple-500" />
-                <span className="font-medium">{t(language, 'memory.sequence.watch')}</span>
-              </div>
-              <div className="flex justify-center gap-3 py-6">
-                {SEQUENCE_COLORS.map((color, idx) => {
-                  const isHighlighted = idx === sequence[highlightIdx]
-                  const colors = COLOR_CLASS_MAP[color]
-                  return (
-                    <motion.div
-                      key={color}
-                      className={cn(
-                        'size-14 rounded-xl transition-all sm:size-16',
-                        colors.bg,
-                        isHighlighted && 'ring-4 scale-110 shadow-lg',
-                        isHighlighted && colors.ring,
-                        !isHighlighted && 'opacity-40 scale-100',
-                      )}
-                      animate={{
-                        scale: isHighlighted ? 1.15 : 1,
-                        opacity: isHighlighted ? 1 : 0.4,
-                      }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  )
-                })}
-              </div>
-              <p className="text-center text-sm text-muted-foreground">
-                {t(language, 'memory.sequence.watchHint')}
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Palette className="size-4 text-purple-500" />
-                  <span className="font-medium">{t(language, 'memory.sequence.recall')}</span>
-                </div>
-                <Badge variant="outline" className="font-mono">
-                  {userSequence.length} / {sequence.length}
-                </Badge>
-              </div>
-              <p className="text-sm text-muted-foreground">{t(language, 'memory.sequence.recallHint')}</p>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="space-y-4"
+    >
+      <Card className="overflow-hidden border-2 border-slate-800 shadow-xl bg-slate-900/90 text-white">
+        {/* Memory Game Banner (styled identically to the uploaded illustration banner) */}
+        <div className="bg-[#0097a7] py-2.5 px-4 text-center border-b-2 border-slate-950 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="size-5 text-yellow-300 animate-pulse" />
+            <span className="font-extrabold tracking-wider text-xl sm:text-2xl text-white uppercase drop-shadow">
+              {t(language, 'memory.images.title')}
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold">
+            <Badge variant="secondary" className="bg-white/20 hover:bg-white/20 text-white font-mono border-none">
+              {matchedPairs} / 6 {t(language, 'memory.images.pairs')}
+            </Badge>
+            <Badge variant="secondary" className="bg-white/20 hover:bg-white/20 text-white font-mono border-none">
+              {moves} {t(language, 'memory.images.moves')}
+            </Badge>
+            <Badge variant="secondary" className="bg-white/20 hover:bg-white/20 text-white font-mono border-none">
+              {elapsedSeconds}s
+            </Badge>
+          </div>
+        </div>
 
-              {/* User's current selection */}
-              <div className="flex justify-center gap-2 min-h-[40px]">
-                {userSequence.map((colorIdx, i) => (
+        <CardContent className="p-4 sm:p-6 space-y-4">
+          <p className="text-center text-xs sm:text-sm text-slate-300">
+            {t(language, 'memory.images.hint')}
+          </p>
+
+          {/* 3 rows of 4 cards (12 total cards) */}
+          <div className="grid grid-cols-4 gap-2.5 sm:gap-3.5 max-w-lg mx-auto">
+            {cards.map((card, idx) => {
+              const isOpen = card.isFlipped || card.isMatched
+
+              return (
+                <div
+                  key={card.id}
+                  className="aspect-square select-none cursor-pointer [perspective:1000px]"
+                  onClick={() => handleCardClick(idx)}
+                >
                   <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className={cn('size-8 rounded-lg', COLOR_CLASS_MAP[SEQUENCE_COLORS[colorIdx]].bg)}
-                  />
-                ))}
-                {Array.from({ length: sequence.length - userSequence.length }).map((_, i) => (
-                  <div key={`empty-${i}`} className="size-8 rounded-lg border-2 border-dashed border-muted" />
-                ))}
-              </div>
+                    className="relative w-full h-full rounded-2xl transition-transform duration-500 [transform-style:preserve-3d]"
+                    animate={{ rotateY: isOpen ? 180 : 0 }}
+                    whileHover={{ scale: isOpen ? 1 : 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {/* Back of card (face-down) */}
+                    <div className="absolute inset-0 w-full h-full rounded-2xl border-3 border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-lg [backface-visibility:hidden]">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+                        <Brain className="size-5" />
+                      </div>
+                    </div>
 
-              {/* Color buttons */}
-              <div className="flex justify-center gap-3 py-2">
-                {SEQUENCE_COLORS.map((color, idx) => {
-                  const colors = COLOR_CLASS_MAP[color]
-                  return (
-                    <motion.button
-                      key={color}
-                      type="button"
+                    {/* Front of card (face-up image) */}
+                    <div
                       className={cn(
-                        'size-14 rounded-xl cursor-pointer transition-all sm:size-16',
-                        colors.bg,
-                        'hover:ring-4 hover:scale-105 active:scale-95',
-                        colors.ring,
+                        'absolute inset-0 w-full h-full rounded-2xl border-3 sm:border-4 border-slate-900 flex items-center justify-center shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)]',
+                        card.bgColor,
+                        card.isMatched && 'ring-4 ring-emerald-400/90 brightness-105'
                       )}
-                      onClick={() => handleColorClick(idx)}
-                      whileTap={{ scale: 0.85 }}
-                      disabled={userSequence.length >= sequence.length}
-                    />
-                  )
-                })}
-              </div>
+                    >
+                      <card.Icon className="w-10 h-10 sm:w-14 sm:h-14 drop-shadow" />
+                      {card.isMatched && (
+                        <div className="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-emerald-500 text-white shadow">
+                          <CheckCircle2 className="size-3.5" />
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                </div>
+              )
+            })}
+          </div>
 
-              {userSequence.length > 0 && userSequence.length < sequence.length && (
-                <Button variant="ghost" size="sm" onClick={handleUndo} className="mx-auto flex gap-1">
-                  <RotateCcw className="size-3" />
-                  {t(language, 'memory.sequence.undo')}
-                </Button>
-              )}
-            </>
-          )}
+          {/* Victory Overlay if Finished */}
+          <AnimatePresence>
+            {isGameFinished && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="rounded-xl bg-emerald-500/20 border border-emerald-500/40 p-3 text-center flex items-center justify-center gap-3 text-emerald-300 font-semibold"
+              >
+                <Trophy className="size-5 text-yellow-400" />
+                <span>{t(language, 'memory.images.matched')} ({moves} {t(language, 'memory.images.moves')})</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </CardContent>
       </Card>
     </motion.div>

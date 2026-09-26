@@ -124,12 +124,11 @@ const translations: Record<LanguageCode, Translations> = {
     // ============================================================
     // MEMORY MODULE
     // ============================================================
-    'memory.instructions': 'Complete four memory sub-tests: word recall, number recall, visual pattern, and colour sequence. Each test shows you something to memorize, then asks you to recall it.',
-    'memory.subTests': 'Four memory tests',
+    'memory.instructions': 'Complete three memory sub-tests: word recall, number recall, and an image memory matching game. Test your verbal, sequential, and visual working memory.',
+    'memory.subTests': 'Three memory tests',
     'memory.test.words': 'Word Recall — memorize and type back words',
     'memory.test.numbers': 'Number Recall — memorize a number sequence',
-    'memory.test.pattern': 'Visual Pattern — recreate a grid pattern',
-    'memory.test.sequence': 'Colour Sequence — repeat the colour order',
+    'memory.test.images': 'Image Memory — match pairs of illustrated cards',
     'memory.start': 'Start Memory Tests',
     'memory.next': 'Next',
 
@@ -145,24 +144,23 @@ const translations: Record<LanguageCode, Translations> = {
     'memory.numbers.recallHint': 'Type each number separated by spaces. Order matters.',
     'memory.numbers.placeholder': '3 7 2 9 4',
 
-    // Pattern Memory
-    'memory.pattern.memorize': 'Memorize this pattern',
-    'memory.pattern.recall': 'Recreate the pattern',
-    'memory.pattern.recallHint': 'Click the cells to recreate the pattern you saw.',
-
-    // Sequence Memory
-    'memory.sequence.watch': 'Watch the colour sequence',
-    'memory.sequence.watchHint': 'Pay attention to the order of highlighted colours.',
-    'memory.sequence.recall': 'Repeat the sequence',
-    'memory.sequence.recallHint': 'Click the colours in the same order they were shown.',
-    'memory.sequence.undo': 'Undo',
+    // Image Memory Game
+    'memory.images.title': 'Memory Game',
+    'memory.images.memorize': 'Study the card locations',
+    'memory.images.hint': 'Tap cards to flip them and match all 6 pairs in the fewest moves.',
+    'memory.images.pairs': 'Pairs Found',
+    'memory.images.moves': 'Moves',
+    'memory.images.accuracy': 'Accuracy',
+    'memory.images.time': 'Time',
+    'memory.images.matched': 'All pairs matched!',
 
     // Memory Results
     'memory.results.title': 'Memory Tests Complete',
-    'memory.results.subtitle': 'Here are your accuracy scores across all four memory tests.',
+    'memory.results.subtitle': 'Here are your accuracy scores across all memory tests.',
     'memory.results.words': 'Word Recall',
     'memory.results.numbers': 'Number Recall',
-    'memory.results.pattern': 'Pattern Memory',
+    'memory.results.images': 'Image Memory Game',
+    'memory.results.pattern': 'Image Memory',
     'memory.results.sequence': 'Sequence Memory',
     'memory.results.avgTime': 'Avg completion time',
     'memory.results.retry': 'Retry',
@@ -382,12 +380,11 @@ const translations: Record<LanguageCode, Translations> = {
     // ============================================================
     // MEMORY MODULE (Kannada transliterated)
     // ============================================================
-    'memory.instructions': 'Naalkhu smruthi upa-pariksha-galannuu poorthi maadi: padha nenapu, sankhye nenapu, drushya maadari, mattu banna kramavu. Prathi pariksha nimage edhannaadharu nodannu thorisuttadhe, nanthara adannuu nenapisikollalu heeluttadhe.',
-    'memory.subTests': 'Naalkhu smruthi pariksha-galu',
+    'memory.instructions': 'Mooru smruthi upa-pariksha-galannuu poorthi maadi: padha nenapu, sankhye nenapu, mattu chitra smruthi jothe aata. Prathi pariksha nimage edhannaadharu jnapisi nanthara punararambisalu heeluttadhe.',
+    'memory.subTests': 'Mooru smruthi pariksha-galu',
     'memory.test.words': 'Padha Nenapu — padha-galannuu jnapisi mattu type maadi',
     'memory.test.numbers': 'Sankhye Nenapu — sankhye kramavannuu jnapisi',
-    'memory.test.pattern': 'Drushya Maadari — grid maadari-yannuu punarchi maadi',
-    'memory.test.sequence': 'Banna Kramavu — banna kramavannuu punararambi maadi',
+    'memory.test.images': 'Chitra Smruthi Aata — jothe-galannuu seri-maadi',
     'memory.start': 'Smruthi Pariksha Shuru Maadi',
     'memory.next': 'Mundina',
 
@@ -403,24 +400,23 @@ const translations: Record<LanguageCode, Translations> = {
     'memory.numbers.recallHint': 'Prathi sankhyeyannuu spaces-inda berea maadi. Kramavu mukhya.',
     'memory.numbers.placeholder': '3 7 2 9 4',
 
-    // Pattern Memory
-    'memory.pattern.memorize': 'Ee maadariyannuu jnapisi',
-    'memory.pattern.recall': 'Maadariyannuu punarchi maadi',
-    'memory.pattern.recallHint': 'Nivu noadha maadariyannuu punarsrushti maadalu cell-galannuu click maadi.',
-
-    // Sequence Memory
-    'memory.sequence.watch': 'Banna kramavannuu noadi',
-    'memory.sequence.watchHint': 'Highlight aadha banna-gala kramakke lakshya koadi.',
-    'memory.sequence.recall': 'Kramavannuu punararambi maadi',
-    'memory.sequence.recallHint': 'Banna-galannuu adhe kramadalli click maadi.',
-    'memory.sequence.undo': 'Hindakke',
+    // Image Memory Game
+    'memory.images.title': 'Smruthi Aata',
+    'memory.images.memorize': 'Card sthala-galannuu lakshyadalli ittu-kolli',
+    'memory.images.hint': 'Card-galannuu tirugisi 6 jothe-galannuu kammi prayogadalli kanduhidiyiri.',
+    'memory.images.pairs': 'Serida Jothegalu',
+    'memory.images.moves': 'Prayogagalu',
+    'memory.images.accuracy': 'Neravagathana',
+    'memory.images.time': 'Samaya',
+    'memory.images.matched': 'Ella jothegalu seridave!',
 
     // Memory Results
     'memory.results.title': 'Smruthi Pariksha Poorthi',
-    'memory.results.subtitle': 'Naalkhu smruthi pariksha-galalli nimma neravaagatanavu amsha-galu ivey.',
+    'memory.results.subtitle': 'Mooru smruthi pariksha-galalli nimma neravaagatanavu amsha-galu ivey.',
     'memory.results.words': 'Padha Nenapu',
     'memory.results.numbers': 'Sankhye Nenapu',
-    'memory.results.pattern': 'Maadari Smruthi',
+    'memory.results.images': 'Chitra Smruthi Aata',
+    'memory.results.pattern': 'Chitra Smruthi',
     'memory.results.sequence': 'Kramavu Smruthi',
     'memory.results.avgTime': 'Sarasari poorthi samaya',
     'memory.results.retry': 'Matte Prayatnisi',

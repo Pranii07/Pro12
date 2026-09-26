@@ -90,7 +90,7 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 }
 
 export function DashboardOverviewPage() {
-  const { profile, user } = useAuth()
+  const { profile, user, isAdmin } = useAuth()
   const userName =
     profile?.full_name?.trim() ||
     (user?.user_metadata?.full_name as string)?.trim() ||
@@ -132,6 +132,35 @@ export function DashboardOverviewPage() {
   const latestScore = latestPrediction?.overall_score
   const latestLevel = latestPrediction?.screening_level as ScreeningLevel | undefined
 
+  const currentQuickActions = isAdmin
+    ? [
+        {
+          title: 'Admin Console',
+          description: 'Manage users, surveillance, and ML models',
+          icon: Shield,
+          path: '/dashboard/admin',
+          color: 'text-primary',
+          bgColor: 'bg-primary/10',
+        },
+        {
+          title: 'Assessments Surveillance',
+          description: 'Inspect all assessment sessions across patients',
+          icon: ClipboardList,
+          path: '/dashboard/admin?tab=assessments',
+          color: 'text-secondary',
+          bgColor: 'bg-secondary/10',
+        },
+        {
+          title: 'Reports & Export',
+          description: 'Download and manage clinical dossiers',
+          icon: FileText,
+          path: '/dashboard/reports',
+          color: 'text-accent',
+          bgColor: 'bg-accent/10',
+        },
+      ]
+    : quickActions
+
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
@@ -142,15 +171,26 @@ export function DashboardOverviewPage() {
               Welcome back, <span className="gradient-text">{userName}</span>
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Here's an overview of your behavioural assessments.
+              {isAdmin
+                ? "Here's an overview of clinical activity and system surveillance."
+                : "Here's an overview of your behavioural assessments."}
             </p>
           </div>
-          <Link to="/dashboard/new-assessment">
-            <Button className="gap-2">
-              <Plus className="size-4" />
-              New Assessment
-            </Button>
-          </Link>
+          {isAdmin ? (
+            <Link to="/dashboard/admin">
+              <Button className="gap-2">
+                <Shield className="size-4" />
+                Admin Console
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/dashboard/new-assessment">
+              <Button className="gap-2">
+                <Plus className="size-4" />
+                New Assessment
+              </Button>
+            </Link>
+          )}
         </div>
       </motion.div>
 
@@ -202,7 +242,7 @@ export function DashboardOverviewPage() {
       <motion.div {...fadeIn} transition={{ delay: 0.15 }}>
         <h2 className="mb-3 text-lg font-semibold">Quick Actions</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {quickActions.map((action) => (
+          {currentQuickActions.map((action) => (
             <Link key={action.path} to={action.path}>
               <Card className="group h-full cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20">
                 <CardContent className="flex items-start gap-4 p-5">
@@ -285,15 +325,28 @@ export function DashboardOverviewPage() {
               </div>
             ) : (
               <EmptyState
-                title="No screening results yet"
-                description="Complete your first assessment to see your Behavioural Screening Level and module-by-module breakdown."
+                title={isAdmin ? "No clinical assessments yet" : "No screening results yet"}
+                description={
+                  isAdmin
+                    ? "As an administrator, oversee registered patients, inspect completed sessions, and monitor model performance."
+                    : "Complete your first assessment to see your Behavioural Screening Level and module-by-module breakdown."
+                }
                 action={
-                  <Link to="/dashboard/new-assessment">
-                    <Button className="gap-2">
-                      <Plus className="size-4" />
-                      Start Assessment
-                    </Button>
-                  </Link>
+                  isAdmin ? (
+                    <Link to="/dashboard/admin">
+                      <Button className="gap-2">
+                        <Shield className="size-4" />
+                        Admin Console
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to="/dashboard/new-assessment">
+                      <Button className="gap-2">
+                        <Plus className="size-4" />
+                        Start Assessment
+                      </Button>
+                    </Link>
+                  )
                 }
               />
             )}
