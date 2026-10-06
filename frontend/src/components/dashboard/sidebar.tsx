@@ -39,7 +39,7 @@ interface NavItem {
 
 // Admin Navigation (Clinical System Operators)
 const adminPrimaryNavItems: NavItem[] = [
-  { label: 'Home', path: '/', icon: Home },
+  { label: 'Home', path: '/home', icon: Home },
   { label: 'Admin Console', path: '/dashboard/admin', icon: Shield },
   { label: 'User Management', path: '/dashboard/admin?tab=users', icon: Users },
   { label: 'Assessments', path: '/dashboard/admin?tab=assessments', icon: ClipboardList },
@@ -53,7 +53,7 @@ const adminClinicalNavItems: NavItem[] = [
 
 // Regular User Navigation (Patients / Screeners)
 const userNavItems: NavItem[] = [
-  { label: 'Home', path: '/', icon: Home },
+  { label: 'Home', path: '/home', icon: Home },
   { label: 'Overview', path: '/dashboard', icon: LayoutDashboard },
   { label: 'New Assessment', path: '/dashboard/new-assessment', icon: ClipboardList },
   { label: 'History', path: '/dashboard/assessments', icon: History },

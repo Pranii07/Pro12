@@ -11,7 +11,7 @@
 // ===========================================================
 
 import { useState, useMemo } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
@@ -161,8 +161,13 @@ const DEMO_MODEL: ModelMetadata = {
 export function AdminPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const activeTab = searchParams.get('tab') || 'overview'
-  const { user, profile } = useAuth()
+  const { user, profile, isAdmin, loading } = useAuth()
   const queryClient = useQueryClient()
+
+  // Strict role guard: immediately redirect non-admin users to patient dashboard
+  if (!loading && !isAdmin) {
+    return <Navigate to="/dashboard" replace />
+  }
 
   const handleTabChange = (tab: string) => {
     setSearchParams(tab === 'overview' ? {} : { tab }, { replace: true })
@@ -350,11 +355,44 @@ function OverviewTab({ onNavigateTab }: { onNavigateTab: (tab: string) => void }
                         ))}
                       </Pie>
                       <RechartsTooltip
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--card))',
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px',
-                          fontSize: '12px',
+                        content={({ active, payload }) => {
+                          if (!active || !payload || !payload.length) return null
+                          const entry = payload[0]
+                          const name = String(entry.name || '')
+                          const value = Number(entry.value || 0)
+                          const total = pieData.reduce((s, e) => s + e.value, 0)
+                          const pct = total > 0 ? ((value / total) * 100).toFixed(1) : '0'
+                          const color = PIE_COLORS[name] || 'var(--color-primary)'
+
+                          return (
+                            <div
+                              style={{
+                                backgroundColor: 'var(--color-card)',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: '8px',
+                                boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                                padding: '10px 14px',
+                                fontSize: '12px',
+                                color: 'var(--color-foreground)',
+                                minWidth: '160px',
+                              }}
+                              className="space-y-1.5 pointer-events-none"
+                            >
+                              <p className="font-semibold text-foreground flex items-center gap-1.5 text-xs">
+                                <span
+                                  className="size-2 rounded-full inline-block shrink-0"
+                                  style={{ backgroundColor: color }}
+                                />
+                                <span>Risk Level: {name}</span>
+                              </p>
+                              <p className="text-foreground text-xs">
+                                Assessments : {value}
+                              </p>
+                              <p className="text-xs font-medium" style={{ color }}>
+                                Distribution : {pct}% of total
+                              </p>
+                            </div>
+                          )
                         }}
                       />
                     </PieChart>

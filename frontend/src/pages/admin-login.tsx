@@ -21,6 +21,7 @@ import { toast } from 'sonner'
 
 import { useAuth } from '@/contexts/auth-context'
 import { adminApi } from '@/services/admin-api'
+import { supabase } from '@/lib/supabase'
 import { Logo } from '@/components/ui/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,8 +32,8 @@ export function AdminLoginPage() {
   const { signIn, isAuthenticated, isAdmin, refreshProfile } = useAuth()
   const navigate = useNavigate()
 
-  const [email, setEmail] = useState('predatorpranii@gmail.com')
-  const [password, setPassword] = useState('poiuyt')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [demoLoading, setDemoLoading] = useState(false)
@@ -72,8 +73,32 @@ export function AdminLoginPage() {
       }
 
       await refreshProfile()
-      toast.success('Admin authentication successful')
-      navigate('/dashboard/admin', { replace: true })
+
+      // Verify if authenticated user truly has ADMIN privileges
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      let userIsAdmin =
+        currentUser?.email === 'predatorpranii@gmail.com' ||
+        currentUser?.user_metadata?.role === 'ADMIN' ||
+        currentUser?.app_metadata?.role === 'ADMIN'
+
+      if (!userIsAdmin && currentUser?.id) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', currentUser.id)
+          .maybeSingle()
+        if (profileData?.role === 'ADMIN') {
+          userIsAdmin = true
+        }
+      }
+
+      if (userIsAdmin) {
+        toast.success('Admin authentication successful')
+        navigate('/dashboard/admin', { replace: true })
+      } else {
+        toast.info('Signed in to Patient Portal (Account does not have admin privileges)')
+        navigate('/dashboard', { replace: true })
+      }
     } catch {
       toast.error('An unexpected error occurred during admin sign-in')
     } finally {
@@ -95,9 +120,7 @@ export function AdminLoginPage() {
         // Sign in with the registered admin user
         const { error } = await signIn('predatorpranii@gmail.com', 'poiuyt')
         if (error) {
-          // If password differs, prompt regular entry
-          setEmail('predatorpranii@gmail.com')
-          toast.info('Please enter your admin password to continue.')
+          toast.info('Please enter your admin credentials to continue.')
           return
         }
         await adminApi.claimAdmin()

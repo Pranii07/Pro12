@@ -80,9 +80,12 @@ function App() {
                 {/* Public routes (PublicLayout)     */}
                 {/* =============================== */}
                 <Route element={<PublicLayout />}>
-                  <Route path="/" element={<LandingPage />} />
+                  {/* Default root path shows Login Page first */}
+                  <Route path="/" element={<LoginPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/admin/login" element={<AdminLoginPage />} />
+                  <Route path="/home" element={<LandingPage />} />
+                  <Route path="/landing" element={<LandingPage />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 </Route>
@@ -105,7 +108,14 @@ function App() {
                   <Route path="/dashboard/reports" element={<ReportsPage />} />
                   <Route path="/dashboard/profile" element={<ProfilePage />} />
                   <Route path="/dashboard/settings" element={<SettingsPage />} />
-                  <Route path="/dashboard/admin" element={<AdminPage />} />
+                  <Route
+                    path="/dashboard/admin"
+                    element={
+                      <ProtectedRoute requiredRole="ADMIN">
+                        <AdminPage />
+                      </ProtectedRoute>
+                    }
+                  />
                 </Route>
 
                 {/* =============================== */}

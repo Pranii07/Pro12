@@ -26,7 +26,8 @@ export const supabase = createClient(
   supabaseAnonKey || 'placeholder-anon-key',
   {
     auth: {
-      // Persist session in localStorage
+      // Explicitly persist session in browser localStorage
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
       persistSession: true,
       // Auto-refresh token before expiry
       autoRefreshToken: true,

@@ -13,9 +13,10 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { useAuth } from '@/contexts/auth-context'
 
 export function PublicLayout() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isAdmin } = useAuth()
   const location = useLocation()
-  const isLanding = location.pathname === '/'
+  const isLanding = location.pathname === '/home' || location.pathname === '/landing'
+  const isAuthPage = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/admin/login'
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,7 +28,7 @@ export function PublicLayout() {
         className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl"
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link to="/">
+          <Link to={isAuthenticated ? (isAdmin ? "/dashboard/admin" : "/dashboard") : "/"}>
             <Logo size="md" />
           </Link>
 
@@ -50,14 +51,21 @@ export function PublicLayout() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             {isAuthenticated ? (
-              <Link to="/dashboard">
-                <Button size="sm">Dashboard</Button>
+              <Link to={isAdmin ? "/dashboard/admin" : "/dashboard"}>
+                <Button size="sm">{isAdmin ? "Admin Console" : "Dashboard"}</Button>
               </Link>
             ) : (
               <>
-                <Link to="/login">
-                  <Button variant="ghost" size="sm">Sign In</Button>
-                </Link>
+                {isAuthPage && (
+                  <Link to="/home">
+                    <Button variant="ghost" size="sm">Explore Platform</Button>
+                  </Link>
+                )}
+                {!isAuthPage && (
+                  <Link to="/login">
+                    <Button variant="ghost" size="sm">Sign In</Button>
+                  </Link>
+                )}
                 <Link to="/register">
                   <Button size="sm">Get Started</Button>
                 </Link>

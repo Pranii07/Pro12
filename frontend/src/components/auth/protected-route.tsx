@@ -16,7 +16,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
-  const { isAuthenticated, loading, profile } = useAuth()
+  const { isAuthenticated, loading, profile, isAdmin } = useAuth()
   const location = useLocation()
 
   // Still checking auth state — show nothing (or a loading indicator)
@@ -37,7 +37,12 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
   }
 
   // Role check (if required)
-  if (requiredRole && profile?.role !== requiredRole) {
+  if (requiredRole === 'ADMIN' && !isAdmin) {
+    // User is authenticated but lacks admin privileges — redirect to user dashboard
+    return <Navigate to="/dashboard" replace />
+  }
+
+  if (requiredRole && profile?.role !== requiredRole && !isAdmin) {
     // User is authenticated but lacks the required role — redirect to dashboard
     return <Navigate to="/dashboard" replace />
   }

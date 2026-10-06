@@ -104,60 +104,48 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   // -------------------------------------------------------
-  // Initialize: check existing session
+  // Initialize & listen for auth state changes
   // -------------------------------------------------------
   useEffect(() => {
     let mounted = true
 
-    const initAuth = async () => {
-      try {
-        const { data: { session: existingSession } } = await supabase.auth.getSession()
-
-        if (!mounted) return
-
-        if (existingSession) {
-          setSession(existingSession)
-          setUser(existingSession.user)
-          await fetchProfile(existingSession.user.id)
-        }
-      } catch (err) {
-        console.error('[Auth] Failed to get session:', err)
-      } finally {
-        if (mounted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    initAuth()
-
-    return () => {
-      mounted = false
-    }
-  }, [fetchProfile])
-
-  // -------------------------------------------------------
-  // Listen for auth state changes
-  // -------------------------------------------------------
-  useEffect(() => {
+    // 1. Listen for all Supabase auth state changes (INITIAL_SESSION, SIGNED_IN, SIGNED_OUT, TOKEN_REFRESHED)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
+        if (!mounted) return
+
         setSession(newSession)
         setUser(newSession?.user ?? null)
+        setLoading(false)
 
-        if (event === 'SIGNED_IN' && newSession?.user) {
-          // Small delay to let the trigger create the profile
-          setTimeout(() => fetchProfile(newSession.user.id), 500)
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
+          fetchProfile(newSession.user.id)
         } else if (event === 'SIGNED_OUT') {
           setProfile(null)
         } else if (event === 'TOKEN_REFRESHED' && newSession?.user) {
-          // Profile might have changed, refresh it
-          await fetchProfile(newSession.user.id)
+          fetchProfile(newSession.user.id)
         }
       }
     )
 
+    // 2. Proactively read restored session from localStorage
+    supabase.auth.getSession()
+      .then(({ data: { session: existingSession } }) => {
+        if (!mounted) return
+        if (existingSession) {
+          setSession(existingSession)
+          setUser(existingSession.user)
+          fetchProfile(existingSession.user.id)
+        }
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('[Auth] Failed to get session:', err)
+        if (mounted) setLoading(false)
+      })
+
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
   }, [fetchProfile])

@@ -8,6 +8,14 @@ import { ArrowRight, Sparkles, Shield } from 'lucide-react'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { PrototypeBanner } from '@/components/ui/disclaimer-banner'
+import {
+  BrainDoodle,
+  SpeechWaveDoodle,
+  EyeTrackingDoodle,
+  SynapseDoodle,
+  SparkleDoodle,
+  OrbitDoodle,
+} from '@/components/landing/background-doodles'
 
 export function HeroSection() {
   const { isAuthenticated, isAdmin } = useAuth()
@@ -21,6 +29,71 @@ export function HeroSection() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36">
+        {/* Floating animated doodles flanking the hero */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden select-none">
+          {/* Top Left: Brain doodle with neural connections */}
+          <div className="absolute top-6 left-3 sm:top-12 sm:left-6 lg:left-10">
+            <BrainDoodle
+              className="text-primary/45 hover:text-primary transition-colors size-14 sm:size-16 lg:size-20"
+              delay={0.2}
+              duration={5.6}
+            />
+          </div>
+
+          {/* Top Right: Facial eye-tracking scanner */}
+          <div className="absolute top-8 right-3 sm:top-14 sm:right-6 lg:right-12">
+            <EyeTrackingDoodle
+              className="text-secondary/50 hover:text-secondary transition-colors size-14 sm:size-16 lg:size-20"
+              delay={0.8}
+              duration={6.2}
+            />
+          </div>
+
+          {/* Mid-Lower Left: Speech acoustic wave */}
+          <div className="absolute bottom-28 left-4 sm:left-8 lg:left-14 hidden sm:block">
+            <SpeechWaveDoodle
+              className="text-accent/45 hover:text-accent transition-colors size-18 sm:size-20 lg:size-24"
+              delay={1.1}
+              duration={5.0}
+            />
+          </div>
+
+          {/* Mid-Lower Right: Synaptic dendritic tree */}
+          <div className="absolute bottom-24 right-4 sm:right-8 lg:right-14 hidden sm:block">
+            <SynapseDoodle
+              className="text-primary/45 hover:text-primary transition-colors size-14 sm:size-16 lg:size-20"
+              delay={0.5}
+              duration={6.6}
+            />
+          </div>
+
+          {/* Upper Left Sparkle */}
+          <div className="absolute top-4 left-1/3 hidden md:block">
+            <SparkleDoodle
+              className="text-warning/50 hover:text-warning transition-colors size-7 sm:size-9"
+              delay={0.4}
+              duration={4.2}
+            />
+          </div>
+
+          {/* Upper Right Sparkle */}
+          <div className="absolute top-24 right-1/4 hidden lg:block">
+            <SparkleDoodle
+              className="text-primary/50 hover:text-primary transition-colors size-6 sm:size-8"
+              delay={1.3}
+              duration={3.8}
+            />
+          </div>
+
+          {/* Lower Center Orbital Loop */}
+          <div className="absolute bottom-6 right-1/3 hidden lg:block">
+            <OrbitDoodle
+              className="text-secondary/40 hover:text-secondary transition-colors size-12 sm:size-14"
+              delay={1.6}
+              duration={5.8}
+            />
+          </div>
+        </div>
         <div className="mx-auto max-w-3xl text-center">
           {/* Badge */}
           <motion.div

@@ -32,13 +32,14 @@ import { cn } from '@/lib/utils'
 import type { LanguageCode } from '@/types/database'
 
 // -------------------------------------------------------
+// -------------------------------------------------------
 // Constants
 // -------------------------------------------------------
 
 const TOTAL_TRIALS = 10
-const MIN_DELAY_MS = 1500
-const MAX_DELAY_MS = 4000
-const FALSE_START_MESSAGE_MS = 1200
+const MIN_DELAY_SECONDS = 1
+const MAX_DELAY_SECONDS = 7
+const POST_RESPONSE_WAIT_MS = 2000 // Exactly 2 seconds between trials
 
 // Stimulus shapes and colors
 const STIMULI = [
@@ -63,19 +64,24 @@ type Phase = 'instructions' | 'testing' | 'results'
 type TrialState = 'waiting' | 'ready' | 'stimulus' | 'responded' | 'false-start'
 
 interface TrialResult {
+  trialNumber: number
   reactionTimeMs: number
   isFalseStart: boolean
   stimulusIndex: number
+  delaySeconds: number
 }
 
 interface ReactionMetrics {
   avgReactionTimeMs: number
+  responseVariabilityMs: number
+  coefficientOfVariation: number
   fastestReactionTimeMs: number
   slowestReactionTimeMs: number
   falseStartCount: number
   consistencyScore: number
   validTrials: number
   totalTrials: number
+  allTrials: TrialResult[]
   allReactionTimes: number[]
 }
 
@@ -94,6 +100,7 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const stimulusTimeRef = useRef(0)
+  const currentTrialDelayRef = useRef(0)
   const delayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const rafIdRef = useRef<number | null>(null)
   const moduleStartRef = useRef(0)
@@ -132,21 +139,23 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
     const stimIdx = Math.floor(Math.random() * STIMULI.length)
     setCurrentStimulus(stimIdx)
 
-    // Random delay before showing stimulus
-    const delay = MIN_DELAY_MS + Math.random() * (MAX_DELAY_MS - MIN_DELAY_MS)
+    // Random whole-number delay between 1 and 7 seconds (inclusive)
+    const delaySeconds = Math.floor(Math.random() * (MAX_DELAY_SECONDS - MIN_DELAY_SECONDS + 1)) + MIN_DELAY_SECONDS
+    currentTrialDelayRef.current = delaySeconds
+    const delayMs = delaySeconds * 1000
 
-    // After a brief "get ready" moment, enter the ready state
+    // After a brief initial moment, enter the ready state
     setTimeout(() => {
       setTrialState('ready')
-    }, 300)
+    }, 250)
 
     delayTimeoutRef.current = setTimeout(() => {
-      // Use requestAnimationFrame for precise stimulus timing
+      // Use requestAnimationFrame for precise stimulus presentation timing
       rafIdRef.current = requestAnimationFrame(() => {
         stimulusTimeRef.current = performance.now()
         setTrialState('stimulus')
       })
-    }, delay)
+    }, delayMs)
   }, [])
 
   // -------------------------------------------------------
@@ -158,32 +167,34 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
     const now = performance.now()
 
     if (trialState === 'waiting' || trialState === 'ready') {
-      // FALSE START — clicked before the stimulus appeared
+      // FALSE START — clicked during the 1-7s delay before the stimulus appeared
       trialActiveRef.current = false
       if (delayTimeoutRef.current) clearTimeout(delayTimeoutRef.current)
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
 
       setTrialState('false-start')
       const result: TrialResult = {
+        trialNumber: trialNumber + 1,
         reactionTimeMs: 0,
         isFalseStart: true,
         stimulusIndex: currentStimulus,
+        delaySeconds: currentTrialDelayRef.current,
       }
 
       setTrialResults((prev) => {
         const updated = [...prev, result]
-        // Move to next trial after a brief delay
+        // Wait exactly 2 seconds before starting next trial
         setTimeout(() => {
           if (updated.length >= TOTAL_TRIALS) {
             finishTest(updated)
           } else {
             startTrial(updated.length)
           }
-        }, FALSE_START_MESSAGE_MS)
+        }, POST_RESPONSE_WAIT_MS)
         return updated
       })
     } else if (trialState === 'stimulus') {
-      // VALID REACTION — use requestAnimationFrame-corrected time
+      // VALID REACTION — use high-precision performance timing
       trialActiveRef.current = false
       const reactionTime = now - stimulusTimeRef.current
 
@@ -191,29 +202,31 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
       setTrialState('responded')
 
       const result: TrialResult = {
+        trialNumber: trialNumber + 1,
         reactionTimeMs: Math.round(reactionTime),
         isFalseStart: false,
         stimulusIndex: currentStimulus,
+        delaySeconds: currentTrialDelayRef.current,
       }
 
       setTrialResults((prev) => {
         const updated = [...prev, result]
-        // Brief pause to show result, then next trial
+        // Wait exactly 2 seconds before starting next trial
         setTimeout(() => {
           if (updated.length >= TOTAL_TRIALS) {
             finishTest(updated)
           } else {
             startTrial(updated.length)
           }
-        }, 1000)
+        }, POST_RESPONSE_WAIT_MS)
         return updated
       })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trialState, currentStimulus])
+  }, [trialState, currentStimulus, trialNumber])
 
   // -------------------------------------------------------
-  // Compute metrics from all trials
+  // Compute metrics from all 10 trials
   // -------------------------------------------------------
   const finishTest = useCallback((allResults: TrialResult[]) => {
     const validResults = allResults.filter((r) => !r.isFalseStart)
@@ -224,38 +237,47 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
       // All false starts — edge case
       setMetrics({
         avgReactionTimeMs: 0,
+        responseVariabilityMs: 0,
+        coefficientOfVariation: 0,
         fastestReactionTimeMs: 0,
         slowestReactionTimeMs: 0,
         falseStartCount: falseStarts,
         consistencyScore: 0,
         validTrials: 0,
         totalTrials: TOTAL_TRIALS,
+        allTrials: allResults,
         allReactionTimes: [],
       })
       setPhase('results')
       return
     }
 
+    // 1. Overall Average Reaction Time
     const avg = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length)
+
+    // 2. Response Variability (Standard Deviation of trial reaction times)
+    const variance = reactionTimes.reduce((sum, t) => sum + Math.pow(t - avg, 2), 0) / reactionTimes.length
+    const stdDev = Math.sqrt(variance)
+    const responseVariabilityMs = Math.round(stdDev * 10) / 10 // rounded to 1 decimal place
+
+    // 3. Coefficient of Variation (CV = SD / Mean)
+    const cv = avg > 0 ? stdDev / avg : 1
+    const consistencyScore = Math.round(Math.max(0, Math.min(100, (1 - cv * 2) * 100)))
+
     const fastest = Math.min(...reactionTimes)
     const slowest = Math.max(...reactionTimes)
 
-    // Consistency score: based on coefficient of variation (lower CV = more consistent)
-    const stdDev = Math.sqrt(
-      reactionTimes.reduce((sum, t) => sum + Math.pow(t - avg, 2), 0) / reactionTimes.length
-    )
-    const cv = avg > 0 ? stdDev / avg : 1
-    // Map CV to a 0-100 score (CV of 0 = perfect 100, CV of 0.5+ ≈ 0)
-    const consistencyScore = Math.round(Math.max(0, Math.min(100, (1 - cv * 2) * 100)))
-
     setMetrics({
       avgReactionTimeMs: avg,
+      responseVariabilityMs,
+      coefficientOfVariation: Math.round(cv * 1000) / 1000,
       fastestReactionTimeMs: fastest,
       slowestReactionTimeMs: slowest,
       falseStartCount: falseStarts,
       consistencyScore,
       validTrials: validResults.length,
       totalTrials: TOTAL_TRIALS,
+      allTrials: allResults,
       allReactionTimes: reactionTimes,
     })
     setPhase('results')
@@ -268,8 +290,7 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
     if (!metrics) return
     setIsSubmitting(true)
 
-    // Score: weighted combo of reaction time and consistency
-    // Fast reaction (200ms) = full marks; 600ms+ = low
+    // Score: weighted combo of reaction time, consistency, and low variability
     const speedScore = metrics.avgReactionTimeMs > 0
       ? Math.max(0, Math.min(100, Math.round((1 - (metrics.avgReactionTimeMs - 200) / 400) * 100)))
       : 0
@@ -282,10 +303,18 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
 
     const features = {
       avg_reaction_time_ms: metrics.avgReactionTimeMs,
+      response_variability_ms: metrics.responseVariabilityMs,
+      standard_deviation_ms: metrics.responseVariabilityMs,
+      coefficient_of_variation: metrics.coefficientOfVariation,
       fastest_reaction_time_ms: metrics.fastestReactionTimeMs,
+      fastest_reaction_ms: metrics.fastestReactionTimeMs,
       slowest_reaction_time_ms: metrics.slowestReactionTimeMs,
+      slowest_reaction_ms: metrics.slowestReactionTimeMs,
       false_start_count: metrics.falseStartCount,
-      consistency_score: metrics.consistencyScore,
+      valid_trials: metrics.validTrials,
+      total_trials: metrics.totalTrials,
+      trial_reaction_times: metrics.allReactionTimes,
+      all_trials: metrics.allTrials,
     }
 
     onComplete(features, score, Math.round(totalTime * 10) / 10)
@@ -352,19 +381,19 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Clock className="size-4 text-amber-500" />
-                  {t(language, 'reaction.step.wait')}
+                  <span>{t(language, 'reaction.step.wait')} (random 1 to 7 seconds delay)</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Zap className="size-4 text-amber-500" />
-                  {t(language, 'reaction.step.react')}
+                  <span>{t(language, 'reaction.step.react')}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <AlertTriangle className="size-4 text-amber-500" />
-                  {t(language, 'reaction.step.falseStart')}
+                  <span>{t(language, 'reaction.step.falseStart')}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Target className="size-4 text-amber-500" />
-                  {t(language, 'reaction.step.trials', { count: TOTAL_TRIALS })}
+                  <span>Exactly 10 trials total — 2-second pause after every response</span>
                 </li>
               </ul>
             </div>
@@ -398,7 +427,7 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
           <Badge variant="outline" className="font-mono">
             {t(language, 'reaction.trial')} {trialNumber + 1} / {TOTAL_TRIALS}
           </Badge>
-          <div className="flex gap-1">
+          <div className="flex gap-1.5">
             {Array.from({ length: TOTAL_TRIALS }).map((_, idx) => {
               const result = trialResults[idx]
               return (
@@ -406,11 +435,12 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
                   key={idx}
                   className={cn(
                     'size-2.5 rounded-full transition-all',
-                    result === undefined && idx === trialNumber && 'bg-primary animate-pulse',
+                    result === undefined && idx === trialNumber && 'bg-primary ring-2 ring-primary/40 animate-pulse',
                     result === undefined && idx !== trialNumber && 'bg-muted',
                     result && !result.isFalseStart && 'bg-success',
                     result?.isFalseStart && 'bg-destructive',
                   )}
+                  title={`Trial ${idx + 1}`}
                 />
               )
             })}
@@ -438,12 +468,12 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
                 className="flex flex-col items-center gap-4 text-center"
               >
                 <div className="flex size-20 items-center justify-center rounded-full bg-muted">
-                  <Clock className="size-8 text-muted-foreground" />
+                  <Clock className="size-8 text-muted-foreground animate-spin-slow" />
                 </div>
                 <p className="text-lg font-medium text-muted-foreground">
                   {t(language, 'reaction.waitForStimulus')}
                 </p>
-                <p className="text-sm text-muted-foreground/70">
+                <p className="text-xs text-muted-foreground/70">
                   {t(language, 'reaction.dontClickYet')}
                 </p>
               </motion.div>
@@ -484,6 +514,9 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
                         ? t(language, 'reaction.feedback.average')
                         : t(language, 'reaction.feedback.slow')}
                 </p>
+                <span className="text-xs text-muted-foreground/75 font-mono">
+                  Waiting 2 seconds before next trial…
+                </span>
               </motion.div>
             )}
 
@@ -501,6 +534,9 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
                 <p className="text-sm text-muted-foreground">
                   {t(language, 'reaction.falseStartHint')}
                 </p>
+                <span className="text-xs text-muted-foreground/75 font-mono">
+                  Waiting 2 seconds before next trial…
+                </span>
               </motion.div>
             )}
           </CardContent>
@@ -536,13 +572,19 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Metrics grid */}
+            {/* Primary Metrics grid */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <MetricCard
                 label={t(language, 'reaction.results.avgTime')}
                 value={metrics.avgReactionTimeMs.toString()}
                 unit="ms"
                 color="text-amber-500"
+              />
+              <MetricCard
+                label={t(language, 'reaction.results.variability')}
+                value={`±${metrics.responseVariabilityMs}`}
+                unit="ms"
+                color="text-indigo-400"
               />
               <MetricCard
                 label={t(language, 'reaction.results.fastest')}
@@ -563,12 +605,6 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
                 color={metrics.falseStartCount === 0 ? 'text-success' : 'text-destructive'}
               />
               <MetricCard
-                label={t(language, 'reaction.results.consistency')}
-                value={metrics.consistencyScore.toString()}
-                unit="/100"
-                color="text-purple-500"
-              />
-              <MetricCard
                 label={t(language, 'reaction.results.validTrials')}
                 value={`${metrics.validTrials}/${metrics.totalTrials}`}
                 unit=""
@@ -576,15 +612,61 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
               />
             </div>
 
-            {/* Mini bar chart of reaction times */}
+            {/* Trial-by-Trial Recorded Reaction Times */}
+            <div className="space-y-3 rounded-xl border border-border/70 bg-muted/30 p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">
+                    All 10 Trials Recorded
+                  </h4>
+                  <p className="text-[11px] text-muted-foreground">
+                    Reaction times and pre-signal delays (1–7s) for each trial
+                  </p>
+                </div>
+                <Badge variant="outline" className="text-xs font-mono">
+                  Variability: ±{metrics.responseVariabilityMs}ms
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                {metrics.allTrials.map((trial) => (
+                  <div
+                    key={trial.trialNumber}
+                    className={cn(
+                      'p-2.5 rounded-lg border text-center transition-all',
+                      trial.isFalseStart
+                        ? 'bg-destructive/10 border-destructive/30 text-destructive'
+                        : 'bg-card border-border/80 shadow-xs'
+                    )}
+                  >
+                    <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
+                      <span className="font-semibold text-foreground">#{trial.trialNumber}</span>
+                      <span className="text-[10px]">{trial.delaySeconds}s delay</span>
+                    </div>
+                    {trial.isFalseStart ? (
+                      <span className="text-xs font-bold text-destructive">False Start</span>
+                    ) : (
+                      <div className="flex items-baseline justify-center gap-0.5">
+                        <span className="text-base font-bold tabular-nums text-foreground">
+                          {trial.reactionTimeMs}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">ms</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Visual Timeline Bar Chart */}
             {metrics.allReactionTimes.length > 0 && (
               <div className="space-y-2">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t(language, 'reaction.results.timeline')}
                 </p>
-                <div className="flex items-end gap-1 h-20">
+                <div className="flex items-end gap-1 h-20 bg-muted/20 p-2 rounded-lg border border-border/40">
                   {metrics.allReactionTimes.map((time, idx) => {
-                    const maxTime = Math.max(...metrics.allReactionTimes)
+                    const maxTime = Math.max(...metrics.allReactionTimes, 500)
                     const height = maxTime > 0 ? (time / maxTime) * 100 : 0
                     return (
                       <motion.div
@@ -593,11 +675,15 @@ export function ReactionModule({ language, onComplete, onSkip }: ReactionModuleP
                         animate={{ height: `${height}%` }}
                         transition={{ delay: idx * 0.05, duration: 0.3 }}
                         className={cn(
-                          'flex-1 rounded-t-sm',
-                          time < 300 ? 'bg-success' : time < 500 ? 'bg-amber-500' : 'bg-destructive',
+                          'flex-1 rounded-t-sm flex items-end justify-center pb-1',
+                          time < 280 ? 'bg-success' : time < 450 ? 'bg-amber-500' : 'bg-destructive',
                         )}
-                        title={`${time}ms`}
-                      />
+                        title={`Trial: ${time}ms`}
+                      >
+                        <span className="text-[9px] font-mono text-white/90 font-bold hidden sm:inline">
+                          {time}
+                        </span>
+                      </motion.div>
                     )
                   })}
                 </div>

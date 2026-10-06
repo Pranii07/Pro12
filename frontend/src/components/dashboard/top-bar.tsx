@@ -83,7 +83,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem>
-                <Link to="/" className="flex w-full items-center">
+                <Link to="/home" className="flex w-full items-center">
                   Home
                 </Link>
               </DropdownMenuItem>

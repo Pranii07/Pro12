@@ -119,28 +119,35 @@ def verify_jwt(token: str, settings: Settings) -> TokenData:
 
     if alg == "ES256":
         jwks = get_supabase_jwks(settings.supabase_url)
-        if not jwks:
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Supabase JWKS public key unavailable.",
-            )
-        verification_key = jwks
+        if not jwks or "keys" not in jwks or not jwks["keys"]:
+            logger.error("Supabase JWKS public key unavailable.")
+            # Fallback to Supabase client verification
+            return _verify_via_supabase_client(token)
+
+        kid = header.get("kid")
+        matched_key = next((k for k in jwks["keys"] if k.get("kid") == kid), None) if kid else None
+        if not matched_key and jwks["keys"]:
+            matched_key = jwks["keys"][0]
+
+        if not matched_key:
+            return _verify_via_supabase_client(token)
+
+        try:
+            from jose import jwk
+            verification_key = jwk.construct(matched_key, "ES256")
+        except Exception as construct_err:
+            logger.warning(f"Failed to construct JWK: {construct_err}")
+            return _verify_via_supabase_client(token)
+
         allowed_algorithms = ["ES256"]
     elif alg == "HS256":
         if not settings.supabase_jwt_secret:
             logger.error("SUPABASE_JWT_SECRET is not configured.")
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="JWT verification is not configured. Set SUPABASE_JWT_SECRET.",
-            )
+            return _verify_via_supabase_client(token)
         verification_key = settings.supabase_jwt_secret
         allowed_algorithms = ["HS256"]
     else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Unsupported token algorithm: {alg}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        return _verify_via_supabase_client(token)
 
     try:
         payload = jwt.decode(
@@ -150,12 +157,8 @@ def verify_jwt(token: str, settings: Settings) -> TokenData:
             options={"verify_aud": False, "leeway": 60},
         )
     except JWTError as e:
-        logger.warning(f"JWT verification failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid or expired token: {e}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        logger.warning(f"JWT decode failed ({e}), falling back to Supabase auth client verification...")
+        return _verify_via_supabase_client(token)
 
     # Extract claims
     user_id = payload.get("sub")
@@ -182,6 +185,31 @@ def verify_jwt(token: str, settings: Settings) -> TokenData:
         email=payload.get("email"),
         role=payload.get("role", "authenticated"),
         exp=exp,
+    )
+
+
+def _verify_via_supabase_client(token: str) -> TokenData:
+    """Fallback validator that queries Supabase Auth directly to verify a JWT."""
+    from app.core.supabase_client import get_supabase_admin
+    admin_client = get_supabase_admin()
+    if admin_client:
+        try:
+            resp = admin_client.auth.get_user(token)
+            if resp and resp.user:
+                u = resp.user
+                return TokenData(
+                    user_id=u.id,
+                    email=u.email,
+                    role="authenticated",
+                    exp=None,
+                )
+        except Exception as sb_err:
+            logger.warning(f"Supabase auth client validation failed: {sb_err}")
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or expired token.",
+        headers={"WWW-Authenticate": "Bearer"},
     )
 
 

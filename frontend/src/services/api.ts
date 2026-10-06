@@ -24,30 +24,9 @@ let refreshPromise: Promise<string | null> | null = null
 
 async function getValidAccessToken(): Promise<string | null> {
   try {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) return null
-
-    // Proactively refresh if token expires within 60 seconds
-    const now = Math.floor(Date.now() / 1000)
-    if (session.expires_at && session.expires_at - now < 60) {
-      if (!refreshPromise) {
-        refreshPromise = (async () => {
-          try {
-            const { data, error } = await supabase.auth.refreshSession()
-            if (error || !data.session) {
-              return null
-            }
-            return data.session.access_token
-          } catch {
-            return null
-          } finally {
-            refreshPromise = null
-          }
-        })()
-      }
-      return await refreshPromise
-    }
-
+    // supabase.auth.getSession() automatically refreshes tokens that are expired or expiring
+    const { data: { session }, error } = await supabase.auth.getSession()
+    if (error || !session) return null
     return session.access_token
   } catch {
     return null
@@ -74,7 +53,7 @@ interface RetryableConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
 }
 
-// Response interceptor: handle common errors with single refresh and retry guard
+// Response interceptor: handle 401 with a single refresh attempt, without wiping user session
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -104,20 +83,9 @@ api.interceptors.response.use(
         if (newToken) {
           originalRequest.headers.Authorization = `Bearer ${newToken}`
           return api.request(originalRequest)
-        } else {
-          // Refresh failed or no session — clear stale session and redirect to login
-          console.warn('[API] Session expired or invalid. Redirecting to login.')
-          try {
-            await supabase.auth.signOut()
-          } catch {
-            // Ignore signout errors
-          }
-          if (!window.location.pathname.startsWith('/login')) {
-            window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`
-          }
         }
       } catch {
-        // Refresh failed
+        // Refresh failed, fall through to reject
       }
     }
 
