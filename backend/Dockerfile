@@ -34,15 +34,17 @@ RUN groupadd -r neuroscreen && useradd -r -g neuroscreen -d /app -s /sbin/nologi
 WORKDIR /app
 
 # Install Python dependencies
-COPY requirements.txt .
+COPY backend/requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy backend application code
+COPY backend/ .
 
-# Create necessary directories
-RUN mkdir -p /app/ml/models && chown -R neuroscreen:neuroscreen /app
+# Ensure ML models from ml/models are copied to /app/ml/models
+COPY ml/models/ /app/ml/models/
+
+RUN chown -R neuroscreen:neuroscreen /app
 
 # Switch to non-root user
 USER neuroscreen

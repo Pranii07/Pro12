@@ -1,0 +1,27 @@
+# ===========================================================
+# NeuroScreen — Docker Build Ignore
+# ===========================================================
+# Speeds up Docker image build and avoids copying unnecessary files.
+
+.git
+.gitignore
+.env
+.env.*
+node_modules/
+frontend/
+dist/
+build/
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+htmlcov/
+.coverage
+docs/
+database/
+tests/
+ml/datasets/
+ml/notebooks/
