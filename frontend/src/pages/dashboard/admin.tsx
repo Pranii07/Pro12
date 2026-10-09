@@ -35,7 +35,6 @@ import {
   Eye,
   CheckCircle2,
   ExternalLink,
-  Download,
   Calendar,
   Sparkles,
   Server,
@@ -78,6 +77,9 @@ import { PrototypeBanner } from '@/components/ui/disclaimer-banner'
 import { PageHeader } from '@/components/ui/page-header'
 import { cn } from '@/lib/utils'
 import { adminApi } from '@/services/admin-api'
+import { benchmarkApi } from '@/services/benchmark-api'
+import { AdminBenchmarksTab } from '@/components/admin/admin-benchmarks-tab'
+import { PatientDetailDashboard } from '@/components/admin/patient-detail-dashboard'
 import type { AdminStats, AdminUser, ModelMetadata } from '@/services/admin-api'
 import type { LanguageCode } from '@/types/database'
 
@@ -222,6 +224,10 @@ export function AdminPage() {
               <Cpu className="size-4" />
               <span>ML & Diagnostics</span>
             </TabsTrigger>
+            <TabsTrigger value="benchmarks" className="gap-2 px-4 py-2 text-xs sm:text-sm font-medium rounded-lg">
+              <Brain className="size-4" />
+              <span>Cognitive Lab</span>
+            </TabsTrigger>
           </TabsList>
 
           <div className="mt-6 w-full">
@@ -236,6 +242,9 @@ export function AdminPage() {
             </TabsContent>
             <TabsContent value="model">
               <ModelInfoTab />
+            </TabsContent>
+            <TabsContent value="benchmarks">
+              <AdminBenchmarksTab />
             </TabsContent>
           </div>
         </Tabs>
@@ -258,6 +267,12 @@ function OverviewTab({ onNavigateTab }: { onNavigateTab: (tab: string) => void }
   const { data: assessments } = useQuery({
     queryKey: ['admin', 'assessments'],
     queryFn: () => adminApi.getAssessments({ limit: 10 }),
+    staleTime: 30 * 1000,
+  })
+
+  const { data: benchmarkOverview } = useQuery({
+    queryKey: ['admin', 'benchmarks', 'overview'],
+    queryFn: () => benchmarkApi.getAdminOverview(),
     staleTime: 30 * 1000,
   })
 
@@ -314,6 +329,38 @@ function OverviewTab({ onNavigateTab }: { onNavigateTab: (tab: string) => void }
           subtitle="Clinical dossiers generated"
         />
       </div>
+
+      {/* Cognitive Lab Quick Surveillance Bar */}
+      <Card className="border-purple-500/20 bg-gradient-to-r from-purple-500/5 via-primary/5 to-transparent shadow-xs">
+        <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-600 font-bold shrink-0">
+              <Brain className="size-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="font-semibold text-sm text-foreground">Cognitive Lab Surveillance</p>
+                <Badge variant="outline" className="text-[10px] bg-purple-500/10 text-purple-600 border-purple-500/30">
+                  {benchmarkOverview?.total_attempts ?? 0} tests recorded
+                </Badge>
+              </div>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Active Patients: <span className="font-semibold text-foreground">{benchmarkOverview?.active_users_count ?? 0}</span> •
+                Cohort Reaction: <span className="font-semibold text-foreground font-mono">{benchmarkOverview?.avg_reaction_time_ms ? `${benchmarkOverview.avg_reaction_time_ms} ms` : '—'}</span> •
+                Verbal: <span className="font-semibold text-foreground font-mono">{benchmarkOverview?.avg_verbal_score ? `${benchmarkOverview.avg_verbal_score} words` : '—'}</span>
+              </p>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => onNavigateTab('benchmarks')}
+            className="text-xs gap-1.5 shrink-0 bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            <span>Open Lab Surveillance</span>
+            <ExternalLink className="size-3.5" />
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Main Charts & Surveillance Row */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -521,11 +568,11 @@ function OverviewTab({ onNavigateTab }: { onNavigateTab: (tab: string) => void }
 // -------------------------------------------------------
 
 function UsersTab() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [search, setSearch] = useState('')
   const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'ADMIN'>('ALL')
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null)
   const [deletingUser, setDeletingUser] = useState<AdminUser | null>(null)
-  const [dossierUserId, setDossierUserId] = useState<string | null>(null)
 
   const queryClient = useQueryClient()
 
@@ -574,6 +621,8 @@ function UsersTab() {
     },
   })
 
+  const selectedUserId = searchParams.get('userId')
+
   const filtered = useMemo(() => {
     if (!users) return []
     return users.filter((u) => {
@@ -586,6 +635,35 @@ function UsersTab() {
       return matchesSearch && matchesRole
     })
   }, [users, search, roleFilter])
+
+  // If a user is selected, render the dedicated full PatientDetailDashboard!
+  if (selectedUserId) {
+    const matchedUser = users?.find((u) => u.id === selectedUserId)
+    return (
+      <div className="space-y-4">
+        <PatientDetailDashboard
+          userId={selectedUserId}
+          onBack={() => {
+            const next = new URLSearchParams(searchParams)
+            next.delete('userId')
+            setSearchParams(next, { replace: true })
+          }}
+          onEditUser={matchedUser ? () => setEditingUser(matchedUser) : undefined}
+        />
+
+        {/* Edit User Modal */}
+        {editingUser && (
+          <EditUserDialog
+            user={editingUser}
+            isOpen={!!editingUser}
+            onClose={() => setEditingUser(null)}
+            onSave={(data) => editMutation.mutate({ userId: editingUser.id, data })}
+            loading={editMutation.isPending}
+          />
+        )}
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -661,13 +739,23 @@ function UsersTab() {
                   <TableHead className="text-center">Language</TableHead>
                   <TableHead className="text-center">Assessments</TableHead>
                   <TableHead className="text-center">Completed</TableHead>
+                  <TableHead className="text-center">Cognitive Lab</TableHead>
                   <TableHead>Registered</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filtered.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-muted/30">
+                  <TableRow
+                    key={user.id}
+                    onClick={() => {
+                      const next = new URLSearchParams(searchParams)
+                      next.set('tab', 'users')
+                      next.set('userId', user.id)
+                      setSearchParams(next, { replace: true })
+                    }}
+                    className="hover:bg-muted/30 cursor-pointer"
+                  >
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="size-8 rounded-full bg-secondary/10 flex items-center justify-center font-semibold text-secondary text-xs">
@@ -711,6 +799,27 @@ function UsersTab() {
                       {user.completed_assessments}
                     </TableCell>
 
+                    <TableCell className="text-center">
+                      {(user.cognitive_tests ?? 0) > 0 ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const next = new URLSearchParams(searchParams)
+                            next.set('tab', 'users')
+                            next.set('userId', user.id)
+                            setSearchParams(next, { replace: true })
+                          }}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/10 text-purple-600 border border-purple-500/30 hover:bg-purple-500/20 transition-colors cursor-pointer"
+                        >
+                          <Brain className="size-3" />
+                          <span>{user.cognitive_tests} tests</span>
+                        </button>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">—</span>
+                      )}
+                    </TableCell>
+
                     <TableCell className="text-xs text-muted-foreground">
                       {new Date(user.created_at).toLocaleDateString('en-US', {
                         month: 'short', day: 'numeric', year: 'numeric',
@@ -723,8 +832,14 @@ function UsersTab() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          title="View Assessment History & Dossier"
-                          onClick={() => setDossierUserId(user.id)}
+                          title="Open Full Patient Dashboard"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const next = new URLSearchParams(searchParams)
+                            next.set('tab', 'users')
+                            next.set('userId', user.id)
+                            setSearchParams(next, { replace: true })
+                          }}
                           className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
                         >
                           <Eye className="size-4" />
@@ -735,7 +850,10 @@ function UsersTab() {
                           variant="ghost"
                           size="sm"
                           title="Edit User Information"
-                          onClick={() => setEditingUser(user)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setEditingUser(user)
+                          }}
                           className="h-8 w-8 p-0 text-primary hover:text-primary hover:bg-primary/10"
                         >
                           <Edit2 className="size-4" />
@@ -746,7 +864,10 @@ function UsersTab() {
                           variant="ghost"
                           size="sm"
                           title="Delete User"
-                          onClick={() => setDeletingUser(user)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setDeletingUser(user)
+                          }}
                           className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
                         >
                           <Trash2 className="size-4" />
@@ -811,15 +932,6 @@ function UsersTab() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      )}
-
-      {/* User Dossier Drawer/Modal */}
-      {dossierUserId && (
-        <UserDossierModal
-          userId={dossierUserId}
-          isOpen={!!dossierUserId}
-          onClose={() => setDossierUserId(null)}
-        />
       )}
     </div>
   )
@@ -936,145 +1048,6 @@ function EditUserDialog({ user, isOpen, onClose, onSave, loading }: EditUserDial
             </Button>
           </DialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-// -------------------------------------------------------
-// User Dossier Modal (Comprehensive User History)
-// -------------------------------------------------------
-
-function UserDossierModal({
-  userId,
-  isOpen,
-  onClose,
-}: {
-  userId: string
-  isOpen: boolean
-  onClose: () => void
-}) {
-  const { data: dossier, isLoading } = useQuery({
-    queryKey: ['admin', 'user-dossier', userId],
-    queryFn: () => adminApi.getUserDetails(userId),
-    enabled: isOpen && !!userId,
-  })
-
-  return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
-          <div className="flex items-center gap-2">
-            <FileText className="size-5 text-primary" />
-            <DialogTitle className="text-base font-semibold">Patient Clinical Dossier</DialogTitle>
-          </div>
-          <DialogDescription className="text-xs">
-            Complete assessment records and generated screening reports for this account
-          </DialogDescription>
-        </DialogHeader>
-
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12 gap-2">
-            <Loader2 className="size-5 animate-spin text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Compiling patient dossier...</span>
-          </div>
-        ) : dossier ? (
-          <div className="space-y-5 py-2 text-xs">
-            {/* User Meta Card */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg border bg-muted/20">
-              <div>
-                <p className="font-semibold text-sm text-foreground">{dossier.profile.full_name || 'No Name Set'}</p>
-                <p className="text-muted-foreground font-mono">{dossier.profile.email || dossier.profile.id}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant={dossier.profile.role === 'ADMIN' ? 'default' : 'secondary'} className="text-[10px]">
-                  {dossier.profile.role}
-                </Badge>
-                <Badge variant="outline" className="text-[10px] uppercase font-mono">
-                  {dossier.profile.language_preference}
-                </Badge>
-              </div>
-            </div>
-
-            {/* Assessment History */}
-            <div className="space-y-2">
-              <h4 className="font-semibold text-xs text-foreground uppercase tracking-wider">
-                Assessment Sessions ({dossier.assessments.length})
-              </h4>
-              {dossier.assessments.length > 0 ? (
-                <div className="divide-y divide-border rounded-lg border bg-card">
-                  {dossier.assessments.map((a) => {
-                    const statusCfg = STATUS_CONFIG[a.status]
-                    return (
-                      <div key={a.id} className="flex items-center justify-between p-3 hover:bg-muted/20">
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-semibold">{a.id.slice(0, 8)}...</span>
-                            {statusCfg && (
-                              <Badge variant="outline" className={cn('text-[9px] px-1 py-0', statusCfg.className)}>
-                                {statusCfg.label}
-                              </Badge>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-muted-foreground">
-                            Started: {new Date(a.started_at).toLocaleString()}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Link to={`/dashboard/results/${a.id}`}>
-                            <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
-                              <ExternalLink className="size-3" />
-                              View Results
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <p className="text-muted-foreground italic text-xs">No assessments taken by this user yet.</p>
-              )}
-            </div>
-
-            {/* Generated Reports */}
-            <div className="space-y-2">
-              <h4 className="font-semibold text-xs text-foreground uppercase tracking-wider">
-                Clinical Reports Generated ({dossier.reports.length})
-              </h4>
-              {dossier.reports.length > 0 ? (
-                <div className="divide-y divide-border rounded-lg border bg-card">
-                  {dossier.reports.map((r) => (
-                    <div key={r.id} className="flex items-center justify-between p-3 hover:bg-muted/20">
-                      <div>
-                        <p className="font-medium text-xs text-foreground">{r.file_name}</p>
-                        <p className="text-[11px] text-muted-foreground">
-                          {new Date(r.generated_at).toLocaleString()} • {Math.round((r.file_size_bytes || 0) / 1024)} KB
-                        </p>
-                      </div>
-                      <Link to={`/dashboard/results/${r.assessment_id}`}>
-                        <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-primary">
-                          <Download className="size-3" />
-                          View / Download
-                        </Button>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-muted-foreground italic text-xs">No reports generated yet.</p>
-              )}
-            </div>
-          </div>
-        ) : (
-          <p className="text-muted-foreground italic text-xs py-4">Unable to load patient dossier.</p>
-        )}
-
-        <DialogFooter className="pt-2">
-          <Button variant="outline" size="sm" onClick={onClose}>
-            Close Dossier
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

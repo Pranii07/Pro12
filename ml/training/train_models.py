@@ -123,25 +123,25 @@ def get_models() -> dict[str, object]:
 def train_and_evaluate():
     """Run the full training pipeline."""
     print("=" * 60)
-    print("NeuroScreen — Model Training & Comparison")
+    print("NeuroScreen - Model Training & Comparison")
     print("=" * 60)
     print()
-    print("⚠️  Research/Educational Prototype — synthetic data only.")
+    print("[NOTICE] Research/Educational Prototype - synthetic data only.")
     print()
 
     # --- Load Dataset ---
     if not DATASET_PATH.exists():
-        print(f"❌ Dataset not found at {DATASET_PATH}")
+        print(f"[ERROR] Dataset not found at {DATASET_PATH}")
         print("   Run 'py ml/datasets/generate_synthetic.py' first.")
         sys.exit(1)
 
     df = pd.read_csv(DATASET_PATH)
-    print(f"✅ Dataset loaded: {df.shape[0]} samples, {df.shape[1]} columns")
+    print(f"[OK] Dataset loaded: {df.shape[0]} samples, {df.shape[1]} columns")
 
     # --- Preprocess ---
     preprocessor = NeuroScreenPreprocessor()
     X, y = preprocessor.fit_transform(df)
-    print(f"✅ Preprocessing complete. X: {X.shape}, y: {y.shape}")
+    print(f"[OK] Preprocessing complete. X: {X.shape}, y: {y.shape}")
 
     # --- Train/Test Split ---
     X_train, X_test, y_train, y_test = train_test_split(
@@ -237,24 +237,24 @@ def train_and_evaluate():
     print(f"{'Model':<15} {'Accuracy':>10} {'Precision':>10} {'Recall':>10} {'F1':>10} {'ROC-AUC':>10} {'CV F1':>10}")
     print("-" * 75)
     for name, r in results.items():
-        marker = " ← BEST" if name == best_model_name else ""
+        marker = " <- BEST" if name == best_model_name else ""
         roc_str = f"{r['roc_auc_weighted']:.4f}" if r['roc_auc_weighted'] else "N/A"
         print(f"{name:<15} {r['accuracy']:>10.4f} {r['precision_weighted']:>10.4f} {r['recall_weighted']:>10.4f} {r['f1_weighted']:>10.4f} {roc_str:>10} {r['cv_f1_mean']:>10.4f}{marker}")
     print()
 
     # --- Save Best Model ---
-    print(f"🏆 Best model: {best_model_name} (F1={best_f1:.4f})")
+    print(f"[BEST] Best model: {best_model_name} (F1={best_f1:.4f})")
     print()
 
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
     # Save preprocessor
     preprocessor.save(PREPROCESSOR_PATH)
-    print(f"✅ Preprocessor saved: {PREPROCESSOR_PATH}")
+    print(f"[OK] Preprocessor saved: {PREPROCESSOR_PATH}")
 
     # Save best model
     joblib.dump(best_model_obj, BEST_MODEL_PATH)
-    print(f"✅ Best model saved: {BEST_MODEL_PATH}")
+    print(f"[OK] Best model saved: {BEST_MODEL_PATH}")
 
     # --- Save Metadata ---
     metadata = {
@@ -304,13 +304,13 @@ def train_and_evaluate():
 
     with open(METADATA_PATH, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2, ensure_ascii=False)
-    print(f"✅ Metadata saved: {METADATA_PATH}")
+    print(f"[OK] Metadata saved: {METADATA_PATH}")
 
     print()
-    print("✅ Training pipeline complete.")
+    print("[OK] Training pipeline complete.")
     print()
-    print("⚠️  REMINDER: All metrics above are from synthetic data.")
-    print("   Research/Educational Prototype — not clinically validated.")
+    print("[REMINDER]: All metrics above are from synthetic data.")
+    print("   Research/Educational Prototype - not clinically validated.")
 
     return results, best_model_name
 

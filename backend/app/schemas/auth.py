@@ -54,6 +54,7 @@ class UserWithStats(ProfileResponse):
     """Profile with assessment statistics (for admin views)."""
     total_assessments: int = 0
     completed_assessments: int = 0
+    cognitive_tests: int = 0
     last_assessment_at: Optional[datetime] = None
 
 

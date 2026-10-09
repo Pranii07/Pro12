@@ -13,6 +13,7 @@ from app.api.admin import router as admin_router
 from app.api.media import router as media_router
 from app.api.predictions import router as predictions_router
 from app.api.reports import router as reports_router
+from app.api.benchmarks import router as benchmarks_router
 
 # Main API router — all sub-routers are prefixed under /api
 api_router = APIRouter(prefix="/api")
@@ -25,4 +26,5 @@ api_router.include_router(admin_router)
 api_router.include_router(media_router)
 api_router.include_router(predictions_router)
 api_router.include_router(reports_router)
+api_router.include_router(benchmarks_router)
 

@@ -302,28 +302,28 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-rose-500/20">
+        <Card className="overflow-hidden border border-rose-500/20 shadow-md">
           <div className="h-1.5 bg-rose-500/10" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-rose-500/10">
-                <Camera className="size-7 text-rose-500" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-rose-500/10">
+                <Camera className="size-6 text-rose-500" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'module.facial')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'module.facial')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'facial.instructions')}
                 </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5">
             {/* What we measure */}
-            <div className="rounded-xl bg-muted/50 p-6 space-y-3">
-              <h4 className="font-medium text-sm">{t(language, 'facial.whatWeMeasure')}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="rounded-xl bg-muted/50 p-4 sm:p-5 space-y-2.5">
+              <h4 className="font-semibold text-xs sm:text-sm">{t(language, 'facial.whatWeMeasure')}</h4>
+              <ul className="space-y-1.5 text-xs sm:text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Eye className="size-4 text-rose-500" />
                   {t(language, 'facial.metric.blink')}
@@ -340,9 +340,9 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
             </div>
 
             {/* Camera permission notice */}
-            <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4 text-sm text-muted-foreground">
-              <p className="flex items-center gap-2 font-medium text-foreground">
-                <Camera className="size-4 text-rose-500" />
+            <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-3.5 text-xs sm:text-sm text-muted-foreground">
+              <p className="flex items-center gap-2 font-medium text-foreground text-xs sm:text-sm">
+                <Camera className="size-3.5 text-rose-500" />
                 {t(language, 'facial.permissionNotice')}
               </p>
               <p className="mt-1 text-xs">
@@ -350,12 +350,12 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
               </p>
             </div>
 
-            <div className="flex items-center justify-between gap-3">
-              <Button id="facial-skip" variant="outline" onClick={onSkip} className="gap-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button id="facial-skip" variant="outline" onClick={onSkip} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <SkipForward className="size-4" />
                 {t(language, 'runner.skip')}
               </Button>
-              <Button id="facial-start" onClick={requestPermission} className="gap-2">
+              <Button id="facial-start" onClick={requestPermission} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <Play className="size-4" />
                 {t(language, 'facial.start')}
               </Button>
@@ -371,12 +371,12 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
   // -------------------------------------------------------
   if (phase === 'permission') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl">
-        <Card className="border-2 border-rose-500/20">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl">
+        <Card className="border border-rose-500/20 shadow-sm">
           <CardContent className="flex flex-col items-center gap-4 p-12 text-center">
             <Loader2 className="size-10 text-rose-500 animate-spin" />
-            <p className="text-lg font-medium">{t(language, 'facial.requestingPermission')}</p>
-            <p className="text-sm text-muted-foreground">{t(language, 'facial.allowCamera')}</p>
+            <p className="text-base font-semibold">{t(language, 'facial.requestingPermission')}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{t(language, 'facial.allowCamera')}</p>
           </CardContent>
         </Card>
       </motion.div>
@@ -390,25 +390,25 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
     const remaining = CAPTURE_DURATION_SECONDS - captureTime
 
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-4xl space-y-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl space-y-4">
         {/* Timer bar */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
-            <div className="size-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="font-medium text-red-500">{t(language, 'facial.capturing')}</span>
+            <div className="size-2.5 rounded-full bg-red-500 animate-pulse" />
+            <span className="font-semibold text-xs text-red-500 uppercase tracking-wide">{t(language, 'facial.capturing')}</span>
           </div>
           <div className="flex items-center gap-3">
             <Badge variant="secondary" className="font-mono text-xs">
               {frameCount} {t(language, 'facial.frames')}
             </Badge>
-            <Badge variant="outline" className="font-mono">
+            <Badge variant="outline" className="font-mono text-xs">
               {remaining}s
             </Badge>
           </div>
         </div>
 
-        {/* Camera preview — large viewport */}
-        <Card className="overflow-hidden border-2 border-rose-500/20">
+        {/* Camera preview */}
+        <Card className="overflow-hidden border border-rose-500/20 shadow-md">
           <CardContent className="p-0 relative">
             <video
               ref={videoRef}
@@ -416,14 +416,14 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
               playsInline
               muted
               className="w-full object-cover bg-black"
-              style={{ transform: 'scaleX(-1)', minHeight: '420px', maxHeight: '70vh' }}
+              style={{ transform: 'scaleX(-1)', minHeight: '380px', maxHeight: '65vh' }}
             />
             {/* Overlay guide */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="size-56 rounded-full border-2 border-dashed border-white/30" />
+              <div className="size-48 sm:size-52 rounded-full border-2 border-dashed border-white/30" />
             </div>
             <div className="absolute bottom-4 left-0 right-0 text-center">
-              <span className="rounded-full bg-black/60 px-5 py-2 text-sm font-medium text-white">
+              <span className="rounded-full bg-black/60 px-4 py-1.5 text-xs font-medium text-white">
                 {t(language, 'facial.lookAtScreen')}
               </span>
             </div>
@@ -434,7 +434,7 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
         <canvas ref={canvasRef} className="hidden" />
 
         {/* Progress bar */}
-        <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-rose-500 to-rose-400"
             animate={{ width: `${(captureTime / CAPTURE_DURATION_SECONDS) * 100}%` }}
@@ -450,12 +450,12 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
   // -------------------------------------------------------
   if (phase === 'processing') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl">
-        <Card className="border-2 border-rose-500/20">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl">
+        <Card className="border border-rose-500/20 shadow-sm">
           <CardContent className="flex flex-col items-center gap-4 p-12 text-center">
             <Loader2 className="size-10 text-rose-500 animate-spin" />
-            <p className="text-lg font-medium">{t(language, 'facial.processing')}</p>
-            <p className="text-sm text-muted-foreground">{t(language, 'facial.processingDetail')}</p>
+            <p className="text-base font-semibold">{t(language, 'facial.processing')}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{t(language, 'facial.processingDetail')}</p>
           </CardContent>
         </Card>
       </motion.div>
@@ -467,18 +467,18 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
   // -------------------------------------------------------
   if (phase === 'error') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl">
-        <Card className="border-2 border-destructive/20">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl">
+        <Card className="border border-destructive/20 shadow-sm">
           <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
             <AlertCircle className="size-10 text-destructive" />
-            <p className="text-lg font-medium">{t(language, 'facial.error')}</p>
-            <p className="text-sm text-muted-foreground">{errorMessage}</p>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={onSkip} className="gap-2">
+            <p className="text-base font-semibold">{t(language, 'facial.error')}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{errorMessage}</p>
+            <div className="flex gap-3 pt-2">
+              <Button variant="outline" onClick={onSkip} className="gap-2 h-9 text-xs sm:text-sm font-medium">
                 <SkipForward className="size-4" />
                 {t(language, 'runner.skip')}
               </Button>
-              <Button onClick={handleReset} className="gap-2">
+              <Button onClick={handleReset} className="gap-2 h-9 text-xs sm:text-sm font-medium">
                 <RotateCcw className="size-4" />
                 {t(language, 'facial.tryAgain')}
               </Button>
@@ -497,27 +497,27 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-rose-500/20">
+        <Card className="overflow-hidden border border-rose-500/20 shadow-md">
           <div className="h-1.5 bg-gradient-to-r from-rose-500 to-rose-400" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-success/10">
-                <CheckCircle2 className="size-7 text-success" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-success/10">
+                <CheckCircle2 className="size-6 text-success" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'facial.results.title')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'facial.results.title')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'facial.results.subtitle')}
                 </p>
               </div>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5">
             {/* Metrics grid */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
               <MetricCard
                 label={t(language, 'facial.results.blinkRate')}
                 value={features.blink_rate_per_minute.toString()}
@@ -546,13 +546,13 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
 
             {/* Emotion indicators — EXPERIMENTAL */}
             {features.emotion_indicators && (
-              <div className="rounded-xl border border-dashed border-warning/30 bg-warning/5 p-4 space-y-2">
+              <div className="rounded-xl border border-dashed border-warning/30 bg-warning/5 p-3.5 space-y-1.5">
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="text-xs">
                     {t(language, 'facial.results.experimental')}
                   </Badge>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
                   <div>
                     <span className="text-muted-foreground">{t(language, 'facial.results.smileLikelihood')}: </span>
                     <span className="font-medium">{Math.round(features.emotion_indicators.smile_likelihood * 100)}%</span>
@@ -565,13 +565,13 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
             )}
 
             {/* Capture info */}
-            <div className="flex items-center justify-center gap-4 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
+            <div className="flex items-center justify-center gap-4 rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground font-medium">
               <span className="flex items-center gap-1">
-                <Clock className="size-4" />
+                <Clock className="size-3.5" />
                 {features.capture_duration_seconds}s
               </span>
               <span className="flex items-center gap-1">
-                <Camera className="size-4" />
+                <Camera className="size-3.5" />
                 {features.frames_processed} {t(language, 'facial.frames')}
               </span>
             </div>
@@ -582,12 +582,12 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-between gap-3">
-              <Button id="facial-retry" variant="outline" onClick={handleReset} className="gap-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button id="facial-retry" variant="outline" onClick={handleReset} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <RotateCcw className="size-4" />
                 {t(language, 'facial.results.retry')}
               </Button>
-              <Button id="facial-submit" onClick={handleSubmit} disabled={isSubmitting} className="gap-2">
+              <Button id="facial-submit" onClick={handleSubmit} disabled={isSubmitting} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <CheckCircle2 className="size-4" />
                 {isSubmitting ? t(language, 'facial.results.submitting') : t(language, 'facial.results.submit')}
               </Button>
@@ -607,11 +607,11 @@ export function FacialModule({ language, assessmentId, onComplete, onSkip }: Fac
 
 function MetricCard({ label, value, unit, color }: { label: string; value: string; unit: string; color: string }) {
   return (
-    <div className="rounded-xl border bg-card p-3 text-center">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={cn('mt-1 text-2xl font-bold tabular-nums', color)}>
+    <div className="rounded-xl border bg-card p-3 text-center shadow-xs">
+      <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">{label}</p>
+      <p className={cn('mt-0.5 text-xl font-bold tabular-nums', color)}>
         {value}
-        {unit && <span className="ml-0.5 text-xs font-normal text-muted-foreground">{unit}</span>}
+        {unit && <span className="ml-1 text-xs font-normal text-muted-foreground">{unit}</span>}
       </p>
     </div>
   )

@@ -57,76 +57,76 @@ export function ModulePlaceholder({
   const colors = MODULE_COLORS[moduleType]
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.3 }}
-      className="mx-auto max-w-2xl"
-    >
-      <Card className={`overflow-hidden border-2 ${colors.border}`}>
-        {/* Gradient header strip */}
-        <div className={`h-1.5 ${colors.bg}`} />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.96 }}
+        transition={{ duration: 0.3 }}
+        className="mx-auto w-full max-w-3xl"
+      >
+        <Card className={`overflow-hidden border ${colors.border} shadow-md`}>
+          {/* Gradient header strip */}
+          <div className={`h-1.5 ${colors.bg}`} />
 
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-4">
-            <div className={`flex size-14 items-center justify-center rounded-2xl ${colors.bg}`}>
-              <Icon className={`size-7 ${colors.text}`} />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className={`flex size-11 items-center justify-center rounded-xl ${colors.bg}`}>
+                <Icon className={`size-6 ${colors.text}`} />
+              </div>
+              <div className="flex-1">
+                <CardTitle className="text-lg font-bold">
+                  {t(language, `module.${moduleType}`)}
+                </CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
+                  {info.description}
+                </p>
+              </div>
+              {info.requiresHardware !== 'none' && (
+                <Badge variant="secondary" className="text-xs">
+                  {info.requiresHardware === 'microphone' ? '🎤 Mic' : '📷 Camera'}
+                </Badge>
+              )}
             </div>
-            <div className="flex-1">
-              <CardTitle className="text-xl">
-                {t(language, `module.${moduleType}`)}
-              </CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {info.description}
-              </p>
-            </div>
-            {info.requiresHardware !== 'none' && (
-              <Badge variant="secondary">
-                {info.requiresHardware === 'microphone' ? '🎤 Mic' : '📷 Camera'}
-              </Badge>
-            )}
-          </div>
-        </CardHeader>
+          </CardHeader>
 
-        <CardContent className="space-y-6">
-          {/* Placeholder content */}
-          <div className="flex flex-col items-center gap-4 rounded-xl bg-muted/50 p-8 text-center">
-            <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-              <Play className="size-6 text-muted-foreground" />
+          <CardContent className="space-y-5">
+            {/* Placeholder content */}
+            <div className="flex flex-col items-center gap-4 rounded-xl bg-muted/50 p-6 sm:p-8 text-center">
+              <div className="flex size-12 items-center justify-center rounded-full bg-muted">
+                <Play className="size-5 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="font-semibold text-sm text-muted-foreground">
+                  Module Coming Soon
+                </p>
+                <p className="mt-1 text-xs sm:text-sm text-muted-foreground/80">
+                  This module will be fully interactive in the next update.
+                  For now, use the buttons below to test the assessment flow.
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="font-medium text-muted-foreground">
-                Module Coming Soon
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground/80">
-                This module will be fully interactive in the next update.
-                For now, use the buttons below to test the assessment flow.
-              </p>
-            </div>
-          </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center justify-between gap-3">
-            <Button
-              id={`module-skip-${moduleType}`}
-              variant="outline"
-              onClick={onSkip}
-              className="gap-2"
-            >
-              <SkipForward className="size-4" />
-              {t(language, 'runner.skip')}
-            </Button>
-            <Button
-              id={`module-complete-${moduleType}`}
-              onClick={onComplete}
-              className="gap-2"
-            >
-              Complete (Mock)
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+            {/* Action buttons */}
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button
+                id={`module-skip-${moduleType}`}
+                variant="outline"
+                onClick={onSkip}
+                className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium"
+              >
+                <SkipForward className="size-4" />
+                {t(language, 'runner.skip')}
+              </Button>
+              <Button
+                id={`module-complete-${moduleType}`}
+                onClick={onComplete}
+                className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium"
+              >
+                Complete (Mock)
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
   )
 }

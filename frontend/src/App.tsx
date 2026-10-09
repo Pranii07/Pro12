@@ -49,6 +49,7 @@ import { ReportsPage } from "@/pages/dashboard/reports"
 import { ProfilePage } from "@/pages/dashboard/profile"
 import { SettingsPage } from "@/pages/dashboard/settings"
 import { AdminPage } from "@/pages/dashboard/admin"
+import { BenchmarksPage } from "@/pages/dashboard/benchmarks"
 
 // Dev pages
 import { DesignSystemPage } from "@/pages/design-system"
@@ -106,6 +107,7 @@ function App() {
                   <Route path="/dashboard/results/:assessmentId" element={<ResultsPage />} />
                   <Route path="/dashboard/results" element={<ResultsPage />} />
                   <Route path="/dashboard/reports" element={<ReportsPage />} />
+                  <Route path="/dashboard/benchmarks" element={<BenchmarksPage />} />
                   <Route path="/dashboard/profile" element={<ProfilePage />} />
                   <Route path="/dashboard/settings" element={<SettingsPage />} />
                   <Route

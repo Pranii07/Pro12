@@ -181,27 +181,27 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-purple-500/20">
+        <Card className="overflow-hidden border border-purple-500/20 shadow-md">
           <div className="h-1.5 bg-purple-500/10" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-purple-500/10">
-                <Brain className="size-7 text-purple-500" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-purple-500/10">
+                <Brain className="size-6 text-purple-500" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'module.memory')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'module.memory')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'memory.instructions')}
                 </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="rounded-xl bg-muted/50 p-6 space-y-3">
-              <h4 className="font-medium text-sm">{t(language, 'memory.subTests')}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+          <CardContent className="space-y-5">
+            <div className="rounded-xl bg-muted/50 p-4 sm:p-5 space-y-2.5">
+              <h4 className="font-semibold text-xs sm:text-sm">{t(language, 'memory.subTests')}</h4>
+              <ul className="space-y-1.5 text-xs sm:text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Type className="size-4 text-purple-500" />
                   {t(language, 'memory.test.words')}
@@ -217,12 +217,12 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
               </ul>
             </div>
 
-            <div className="flex items-center justify-between gap-3">
-              <Button id="memory-skip" variant="outline" onClick={onSkip} className="gap-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button id="memory-skip" variant="outline" onClick={onSkip} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <SkipForward className="size-4" />
                 {t(language, 'runner.skip')}
               </Button>
-              <Button id="memory-start" onClick={handleStart} className="gap-2">
+              <Button id="memory-start" onClick={handleStart} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <Play className="size-4" />
                 {t(language, 'memory.start')}
               </Button>
@@ -238,7 +238,7 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
   // -------------------------------------------------------
   if (phase === 'testing') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl space-y-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl space-y-4">
         {/* Sub-test progress */}
         <div className="flex items-center gap-2">
           {TEST_ORDER.map((test, idx) => {
@@ -288,39 +288,39 @@ export function MemoryModule({ language, onComplete, onSkip }: MemoryModuleProps
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-purple-500/20">
+        <Card className="overflow-hidden border border-purple-500/20 shadow-md">
           <div className="h-1.5 bg-gradient-to-r from-purple-500 to-purple-400" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-success/10">
-                <CheckCircle2 className="size-7 text-success" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-success/10">
+                <CheckCircle2 className="size-6 text-success" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'memory.results.title')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'memory.results.title')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'memory.results.subtitle')}
                 </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-3 gap-3">
+          <CardContent className="space-y-5">
+            <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
               <MetricCard label={t(language, 'memory.results.words')} value={`${metrics.wordRecallAccuracy}`} unit="%" color="text-purple-500" />
               <MetricCard label={t(language, 'memory.results.numbers')} value={`${metrics.numberRecallAccuracy}`} unit="%" color="text-purple-500" />
               <MetricCard label={t(language, 'memory.results.images')} value={`${metrics.imageMemoryAccuracy}`} unit="%" color="text-purple-500" />
             </div>
-            <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
-              <Clock className="size-4" />
+            <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground font-medium">
+              <Clock className="size-3.5" />
               {t(language, 'memory.results.avgTime')}: {metrics.avgCompletionTimeMs}ms
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <Button id="memory-retry" variant="outline" onClick={handleReset} className="gap-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button id="memory-retry" variant="outline" onClick={handleReset} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <RotateCcw className="size-4" />
                 {t(language, 'memory.results.retry')}
               </Button>
-              <Button id="memory-submit" onClick={handleSubmit} disabled={isSubmitting} className="gap-2">
+              <Button id="memory-submit" onClick={handleSubmit} disabled={isSubmitting} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <CheckCircle2 className="size-4" />
                 {isSubmitting ? t(language, 'memory.results.submitting') : t(language, 'memory.results.submit')}
               </Button>
@@ -862,10 +862,10 @@ function ImageMemoryGameTest({
 
 function MetricCard({ label, value, unit, color }: { label: string; value: string; unit: string; color: string }) {
   return (
-    <div className="rounded-xl border bg-card p-3 text-center">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={cn('mt-1 text-2xl font-bold tabular-nums', color)}>
-        {value}<span className="ml-0.5 text-xs font-normal text-muted-foreground">{unit}</span>
+    <div className="rounded-xl border bg-card p-3 text-center shadow-xs">
+      <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">{label}</p>
+      <p className={cn('mt-0.5 text-xl font-bold tabular-nums', color)}>
+        {value}<span className="ml-1 text-xs font-normal text-muted-foreground">{unit}</span>
       </p>
     </div>
   )

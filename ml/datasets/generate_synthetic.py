@@ -92,12 +92,12 @@ FEATURE_SCHEMA = {
     },
     "reaction": {
         "features": {
-            # Higher reaction time → higher risk
-            "avg_reaction_time_ms":   {"means": [320, 420, 540],  "stds": [80, 90, 110]},
-            "fastest_reaction_ms":    {"means": [210, 278, 365],  "stds": [50, 58, 68]},
-            "slowest_reaction_ms":    {"means": [500, 630, 800],  "stds": [100, 115, 140]},
-            # More false starts → higher risk
-            "false_start_count":      {"means": [0.6, 1.3, 2.2],  "stds": [0.9, 1.2, 1.5]},
+            # Realistic visual reaction times (means & stds calibrated to empirical psychomotor benchmarks)
+            "avg_reaction_time_ms":   {"means": [295, 410, 545],  "stds": [42, 50, 70]},
+            "fastest_reaction_ms":    {"means": [210, 290, 390],  "stds": [35, 42, 55]},
+            "slowest_reaction_ms":    {"means": [460, 620, 820],  "stds": [65, 85, 110]},
+            # False starts (anticipation errors)
+            "false_start_count":      {"means": [0.4, 1.2, 2.3],  "stds": [0.6, 0.9, 1.2]},
         },
         "indicator": "reaction_present",
     },
@@ -331,10 +331,10 @@ def generate_dataset() -> tuple[pd.DataFrame, dict]:
 
 def main():
     print("=" * 60)
-    print("NeuroScreen — Synthetic Dataset Generator")
+    print("NeuroScreen - Synthetic Dataset Generator")
     print("=" * 60)
     print()
-    print("⚠️  Research/Educational Prototype — synthetic data only.")
+    print("[NOTICE] Research/Educational Prototype - synthetic data only.")
     print()
 
     df, metadata = generate_dataset()
@@ -344,13 +344,13 @@ def main():
 
     # Save CSV
     df.to_csv(OUTPUT_CSV, index=False)
-    print(f"✅ Dataset saved: {OUTPUT_CSV}")
+    print(f"[OK] Dataset saved: {OUTPUT_CSV}")
     print(f"   Shape: {df.shape}")
 
     # Save metadata
     with open(OUTPUT_META, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2, ensure_ascii=False)
-    print(f"✅ Metadata saved: {OUTPUT_META}")
+    print(f"[OK] Metadata saved: {OUTPUT_META}")
 
     # Print summary
     print()
@@ -372,7 +372,7 @@ def main():
     print(df[feature_cols].describe().round(2).to_string())
 
     print()
-    print("✅ Dataset generation complete.")
+    print("[OK] Dataset generation complete.")
     return df, metadata
 
 

@@ -2,7 +2,7 @@
   "dataset_name": "NeuroScreen Synthetic Behavioural Dataset",
   "description": "Synthetically generated multimodal behavioural dataset for demonstration and educational purposes. NOT real clinical data. Features simulate typing, memory, reaction time, speech, and facial movement patterns across three behavioural screening levels.",
   "disclaimer": "Research/Educational Prototype — trained and evaluated on synthetic data. Not clinically validated.",
-  "generation_date": "2026-09-16T13:44:28.906629+00:00",
+  "generation_date": "2026-10-06T15:50:37.936383+00:00",
   "n_samples": 2000,
   "n_features": 22,
   "n_indicators": 5,

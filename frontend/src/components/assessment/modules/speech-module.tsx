@@ -350,28 +350,28 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-emerald-500/20">
+        <Card className="overflow-hidden border border-emerald-500/20 shadow-md">
           <div className="h-1.5 bg-emerald-500/10" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-emerald-500/10">
-                <Mic className="size-7 text-emerald-500" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-500/10">
+                <Mic className="size-6 text-emerald-500" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'module.speech')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'module.speech')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'speech.instructions')}
                 </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5">
             {/* What we measure */}
-            <div className="rounded-xl bg-muted/50 p-6 space-y-3">
-              <h4 className="font-medium text-sm">{t(language, 'speech.whatWeMeasure')}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="rounded-xl bg-muted/50 p-4 sm:p-5 space-y-2.5">
+              <h4 className="font-semibold text-xs sm:text-sm">{t(language, 'speech.whatWeMeasure')}</h4>
+              <ul className="space-y-1.5 text-xs sm:text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Volume2 className="size-4 text-emerald-500" />
                   {t(language, 'speech.metric.rate')}
@@ -388,9 +388,9 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
             </div>
 
             {/* Mic permission notice */}
-            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-sm text-muted-foreground">
-              <p className="flex items-center gap-2 font-medium text-foreground">
-                <Mic className="size-4 text-emerald-500" />
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3.5 text-xs sm:text-sm text-muted-foreground">
+              <p className="flex items-center gap-2 font-medium text-foreground text-xs sm:text-sm">
+                <Mic className="size-3.5 text-emerald-500" />
                 {t(language, 'speech.permissionNotice')}
               </p>
               <p className="mt-1 text-xs">
@@ -398,12 +398,12 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
               </p>
             </div>
 
-            <div className="flex items-center justify-between gap-3">
-              <Button id="speech-skip" variant="outline" onClick={onSkip} className="gap-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button id="speech-skip" variant="outline" onClick={onSkip} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <SkipForward className="size-4" />
                 {t(language, 'runner.skip')}
               </Button>
-              <Button id="speech-start" onClick={requestPermission} className="gap-2">
+              <Button id="speech-start" onClick={requestPermission} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <Play className="size-4" />
                 {t(language, 'speech.start')}
               </Button>
@@ -419,12 +419,12 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
   // -------------------------------------------------------
   if (phase === 'permission') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl">
-        <Card className="border-2 border-emerald-500/20">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl">
+        <Card className="border border-emerald-500/20 shadow-sm">
           <CardContent className="flex flex-col items-center gap-4 p-12 text-center">
             <Loader2 className="size-10 text-emerald-500 animate-spin" />
-            <p className="text-lg font-medium">{t(language, 'speech.requestingPermission')}</p>
-            <p className="text-sm text-muted-foreground">{t(language, 'speech.allowMic')}</p>
+            <p className="text-base font-semibold">{t(language, 'speech.requestingPermission')}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{t(language, 'speech.allowMic')}</p>
           </CardContent>
         </Card>
       </motion.div>
@@ -439,25 +439,25 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
     const canStop = recordingTime >= MIN_RECORDING_SECONDS
 
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl space-y-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl space-y-4">
         {/* Timer bar */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
-            <div className="size-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="font-medium text-red-500">{t(language, 'speech.recording')}</span>
+            <div className="size-2.5 rounded-full bg-red-500 animate-pulse" />
+            <span className="font-semibold text-xs text-red-500 uppercase tracking-wide">{t(language, 'speech.recording')}</span>
           </div>
-          <Badge variant="outline" className="font-mono">
+          <Badge variant="outline" className="font-mono text-xs">
             {remaining}s {t(language, 'speech.remaining')}
           </Badge>
         </div>
 
         {/* Prompt to read */}
-        <Card className="border-2 border-emerald-500/20">
-          <CardContent className="p-6 space-y-4">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <Card className="border border-emerald-500/20 shadow-sm">
+          <CardContent className="p-5 sm:p-6 space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {t(language, 'speech.readAloud')}
             </p>
-            <p className="text-base leading-relaxed">
+            <p className="text-sm sm:text-base leading-relaxed">
               {prompt}
             </p>
           </CardContent>
@@ -465,10 +465,10 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
 
         {/* Audio level visualization */}
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-3.5 sm:p-4">
             <div className="flex items-center gap-2">
-              <Mic className={cn('size-5', isRecording ? 'text-red-500' : 'text-muted-foreground')} />
-              <div className="flex flex-1 items-center gap-0.5 h-8">
+              <Mic className={cn('size-4', isRecording ? 'text-red-500' : 'text-muted-foreground')} />
+              <div className="flex flex-1 items-center gap-0.5 h-7">
                 {Array.from({ length: 20 }).map((_, i) => (
                   <motion.div
                     key={i}
@@ -487,7 +487,7 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
         </Card>
 
         {/* Progress bar */}
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400"
             animate={{ width: `${(recordingTime / MAX_RECORDING_SECONDS) * 100}%` }}
@@ -496,13 +496,12 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
         </div>
 
         {/* Stop button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center pt-1">
           <Button
             onClick={stopRecording}
             disabled={!canStop}
             variant={canStop ? 'default' : 'outline'}
-            className="gap-2"
-            size="lg"
+            className="gap-2 h-10 px-6 text-sm font-medium"
           >
             <Square className="size-4" />
             {canStop ? t(language, 'speech.stopRecording') : t(language, 'speech.minRecording')}
@@ -517,12 +516,12 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
   // -------------------------------------------------------
   if (phase === 'processing') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl">
-        <Card className="border-2 border-emerald-500/20">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl">
+        <Card className="border border-emerald-500/20 shadow-sm">
           <CardContent className="flex flex-col items-center gap-4 p-12 text-center">
             <Loader2 className="size-10 text-emerald-500 animate-spin" />
-            <p className="text-lg font-medium">{t(language, 'speech.processing')}</p>
-            <p className="text-sm text-muted-foreground">{t(language, 'speech.processingDetail')}</p>
+            <p className="text-base font-semibold">{t(language, 'speech.processing')}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{t(language, 'speech.processingDetail')}</p>
           </CardContent>
         </Card>
       </motion.div>
@@ -534,18 +533,18 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
   // -------------------------------------------------------
   if (phase === 'error') {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto max-w-2xl">
-        <Card className="border-2 border-destructive/20">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto w-full max-w-3xl">
+        <Card className="border border-destructive/20 shadow-sm">
           <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
             <AlertCircle className="size-10 text-destructive" />
-            <p className="text-lg font-medium">{t(language, 'speech.error')}</p>
-            <p className="text-sm text-muted-foreground">{errorMessage}</p>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={onSkip} className="gap-2">
+            <p className="text-base font-semibold">{t(language, 'speech.error')}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{errorMessage}</p>
+            <div className="flex gap-3 pt-2">
+              <Button variant="outline" onClick={onSkip} className="gap-2 h-9 text-xs sm:text-sm font-medium">
                 <SkipForward className="size-4" />
                 {t(language, 'runner.skip')}
               </Button>
-              <Button onClick={handleReset} className="gap-2">
+              <Button onClick={handleReset} className="gap-2 h-9 text-xs sm:text-sm font-medium">
                 <RotateCcw className="size-4" />
                 {t(language, 'speech.tryAgain')}
               </Button>
@@ -564,27 +563,27 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-emerald-500/20">
+        <Card className="overflow-hidden border border-emerald-500/20 shadow-md">
           <div className="h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-400" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-success/10">
-                <CheckCircle2 className="size-7 text-success" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-success/10">
+                <CheckCircle2 className="size-6 text-success" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'speech.results.title')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'speech.results.title')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'speech.results.subtitle')}
                 </p>
               </div>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5">
             {/* Metrics grid */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               <MetricCard
                 label={t(language, 'speech.results.speechRate')}
                 value={features.speech_rate_wpm.toString()}
@@ -608,18 +607,18 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
             {/* Transcript snippet */}
             {features.transcript && (
               <div className="space-y-1">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {t(language, 'speech.results.transcript')}
                 </p>
-                <div className="rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground max-h-24 overflow-auto">
+                <div className="rounded-lg bg-muted/50 p-3 text-xs sm:text-sm text-muted-foreground max-h-24 overflow-auto">
                   {features.transcript || t(language, 'speech.results.noTranscript')}
                 </div>
               </div>
             )}
 
             {/* Duration */}
-            <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
-              <Clock className="size-4" />
+            <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground font-medium">
+              <Clock className="size-3.5" />
               {t(language, 'speech.results.duration')}: {features.duration_seconds}s
             </div>
 
@@ -629,12 +628,12 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-between gap-3">
-              <Button id="speech-retry" variant="outline" onClick={handleReset} className="gap-2">
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <Button id="speech-retry" variant="outline" onClick={handleReset} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <RotateCcw className="size-4" />
                 {t(language, 'speech.results.retry')}
               </Button>
-              <Button id="speech-submit" onClick={handleSubmit} disabled={isSubmitting} className="gap-2">
+              <Button id="speech-submit" onClick={handleSubmit} disabled={isSubmitting} className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium">
                 <CheckCircle2 className="size-4" />
                 {isSubmitting ? t(language, 'speech.results.submitting') : t(language, 'speech.results.submit')}
               </Button>
@@ -654,11 +653,11 @@ export function SpeechModule({ language, assessmentId, onComplete, onSkip }: Spe
 
 function MetricCard({ label, value, unit, color }: { label: string; value: string; unit: string; color: string }) {
   return (
-    <div className="rounded-xl border bg-card p-3 text-center">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={cn('mt-1 text-2xl font-bold tabular-nums', color)}>
+    <div className="rounded-xl border bg-card p-3 text-center shadow-xs">
+      <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">{label}</p>
+      <p className={cn('mt-0.5 text-xl font-bold tabular-nums', color)}>
         {value}
-        {unit && <span className="ml-0.5 text-xs font-normal text-muted-foreground">{unit}</span>}
+        {unit && <span className="ml-1 text-xs font-normal text-muted-foreground">{unit}</span>}
       </p>
     </div>
   )

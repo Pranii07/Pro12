@@ -77,7 +77,7 @@ export function ModuleSelectionStep({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="mx-auto flex max-w-4xl flex-col gap-6"
+      className="mx-auto flex w-full max-w-3xl flex-col gap-6"
     >
       {/* Header */}
       <div className="flex flex-col gap-2 text-center">
@@ -95,10 +95,12 @@ export function ModuleSelectionStep({
           {selectedCount} of {modules.length} selected
         </Badge>
         <Button
+          id="select-all-btn"
+          type="button"
           variant="ghost"
           size="sm"
           onClick={onSelectAll}
-          className="text-sm"
+          className="text-sm font-medium"
         >
           {allSelected
             ? t(language, 'modules.deselectAll')
@@ -221,6 +223,7 @@ export function ModuleSelectionStep({
         <Button
           id="modules-continue"
           onClick={onContinue}
+          disabled={selectedCount === 0}
         >
           {t(language, 'modules.continue')}
         </Button>

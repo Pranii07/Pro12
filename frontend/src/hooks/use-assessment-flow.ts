@@ -101,6 +101,7 @@ export function useAssessmentFlow() {
   const toggleModule = useCallback((type: ModuleType) => {
     setState((prev) => ({
       ...prev,
+      error: null,
       modules: prev.modules.map((m) =>
         m.type === type ? { ...m, selected: !m.selected } : m
       ),
@@ -108,10 +109,14 @@ export function useAssessmentFlow() {
   }, [])
 
   const selectAll = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      modules: prev.modules.map((m) => ({ ...m, selected: true })),
-    }))
+    setState((prev) => {
+      const allSelected = prev.modules.every((m) => m.selected)
+      return {
+        ...prev,
+        error: null,
+        modules: prev.modules.map((m) => ({ ...m, selected: !allSelected })),
+      }
+    })
   }, [])
 
   const goToQuestionnaire = useCallback(() => {

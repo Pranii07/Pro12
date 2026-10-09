@@ -41,7 +41,7 @@ export function LanguageStep({ language, onSelect, onContinue }: LanguageStepPro
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="mx-auto flex max-w-2xl flex-col items-center gap-8"
+      className="mx-auto flex w-full max-w-3xl flex-col items-center gap-8"
     >
       {/* Header */}
       <div className="flex flex-col items-center gap-3 text-center">

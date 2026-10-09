@@ -66,6 +66,9 @@ async def list_users(
         .execute()
     )
 
+    from app.repositories.benchmark_repository import BenchmarkRepository
+    cog_counts = BenchmarkRepository.get_users_test_counts()
+
     users = []
     for row in result.data or []:
         assessments = row.pop("assessments", [])
@@ -88,6 +91,7 @@ async def list_users(
             updated_at=row["updated_at"],
             total_assessments=total,
             completed_assessments=completed,
+            cognitive_tests=cog_counts.get(user_id_str, 0),
             last_assessment_at=last_assessment,
         ))
 

@@ -1,0 +1,158 @@
+{
+  "model_name": "RandomForest",
+  "model_version": "1.0.0",
+  "training_date": "2026-10-06T15:49:12.279736+00:00",
+  "dataset_description": "Psychomotor vigilance & visual reaction timing distribution (3000 samples) with Ex-Gaussian latency tail modeling.",
+  "disclaimer": "Research/Educational Prototype -- trained and evaluated on behavioral latency data. Not clinically validated.",
+  "n_train_samples": 2400,
+  "n_test_samples": 600,
+  "feature_schema": {
+    "feature_columns": [
+      "avg_reaction_time_ms",
+      "fastest_reaction_ms",
+      "slowest_reaction_ms",
+      "false_start_count",
+      "response_variability_ms",
+      "coefficient_of_variation"
+    ],
+    "core_columns": [
+      "avg_reaction_time_ms",
+      "fastest_reaction_ms",
+      "slowest_reaction_ms",
+      "false_start_count"
+    ],
+    "derived_columns": [
+      "response_variability_ms",
+      "coefficient_of_variation"
+    ],
+    "total_features": 6
+  },
+  "class_names": [
+    "LOW",
+    "MODERATE",
+    "HIGH"
+  ],
+  "best_model": "RandomForest",
+  "metrics": {
+    "accuracy": 0.915,
+    "precision_weighted": 0.9162,
+    "recall_weighted": 0.915,
+    "f1_weighted": 0.9155,
+    "f1_macro": 0.8993,
+    "roc_auc_weighted": 0.9832,
+    "cv_f1_mean": 0.9186,
+    "cv_f1_std": 0.0081,
+    "fit_time_seconds": 5.977,
+    "confusion_matrix": [
+      [
+        287,
+        13,
+        0
+      ],
+      [
+        7,
+        157,
+        16
+      ],
+      [
+        0,
+        15,
+        105
+      ]
+    ]
+  },
+  "feature_importances": {
+    "avg_reaction_time_ms": 0.1764,
+    "fastest_reaction_ms": 0.028,
+    "slowest_reaction_ms": 0.2199,
+    "false_start_count": 0.0411,
+    "response_variability_ms": 0.3765,
+    "coefficient_of_variation": 0.1581
+  },
+  "model_comparison": {
+    "RandomForest": {
+      "accuracy": 0.915,
+      "precision_weighted": 0.9162,
+      "recall_weighted": 0.915,
+      "f1_weighted": 0.9155,
+      "f1_macro": 0.8993,
+      "roc_auc_weighted": 0.9832,
+      "cv_f1_mean": 0.9186,
+      "cv_f1_std": 0.0081,
+      "fit_time_seconds": 5.977,
+      "confusion_matrix": [
+        [
+          287,
+          13,
+          0
+        ],
+        [
+          7,
+          157,
+          16
+        ],
+        [
+          0,
+          15,
+          105
+        ]
+      ]
+    },
+    "GradientBoosting": {
+      "accuracy": 0.9067,
+      "precision_weighted": 0.9063,
+      "recall_weighted": 0.9067,
+      "f1_weighted": 0.9064,
+      "f1_macro": 0.8886,
+      "roc_auc_weighted": 0.9819,
+      "cv_f1_mean": 0.9138,
+      "cv_f1_std": 0.0109,
+      "fit_time_seconds": 11.138,
+      "confusion_matrix": [
+        [
+          290,
+          10,
+          0
+        ],
+        [
+          12,
+          150,
+          18
+        ],
+        [
+          0,
+          16,
+          104
+        ]
+      ]
+    },
+    "LogisticRegression": {
+      "accuracy": 0.9067,
+      "precision_weighted": 0.9088,
+      "recall_weighted": 0.9067,
+      "f1_weighted": 0.9076,
+      "f1_macro": 0.8852,
+      "roc_auc_weighted": 0.9835,
+      "cv_f1_mean": 0.919,
+      "cv_f1_std": 0.0128,
+      "fit_time_seconds": 2.878,
+      "confusion_matrix": [
+        [
+          288,
+          12,
+          0
+        ],
+        [
+          4,
+          153,
+          23
+        ],
+        [
+          0,
+          17,
+          103
+        ]
+      ]
+    }
+  }
+}

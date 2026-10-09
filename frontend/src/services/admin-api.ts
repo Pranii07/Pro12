@@ -32,6 +32,7 @@ export interface AdminUser {
   updated_at: string
   total_assessments: number
   completed_assessments: number
+  cognitive_tests?: number
   last_assessment_at?: string | null
 }
 

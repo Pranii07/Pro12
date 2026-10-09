@@ -1,0 +1,812 @@
+[
+  {
+    "id": "517fb785-bd54-4a87-996e-9c5551ac1f74",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 258.0,
+    "unit": "ms",
+    "details": {
+      "rounds": [
+        245,
+        264,
+        256,
+        263,
+        264
+      ]
+    },
+    "is_best": true,
+    "created_at": "2026-10-07T16:10:19.701379+00:00"
+  },
+  {
+    "id": "a48d722b-17af-493f-92db-60a6d1f39ddb",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 42.0,
+    "unit": "words",
+    "details": {
+      "wordsSeen": 35
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T16:10:19.701379+00:00"
+  },
+  {
+    "id": "064c7b50-3418-4321-bcaa-4bd769fa6dd0",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 8.0,
+    "unit": "digits",
+    "details": {
+      "maxDigits": 9
+    },
+    "is_best": true,
+    "created_at": "2026-10-07T16:10:19.701379+00:00"
+  },
+  {
+    "id": "5fd7d9de-eaf9-47bc-8d2a-3a4fb7739f61",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 7.0,
+    "unit": "level",
+    "details": {
+      "maxLevel": 7
+    },
+    "is_best": true,
+    "created_at": "2026-10-07T16:10:19.701379+00:00"
+  },
+  {
+    "id": "5bccded1-20f0-4793-84ad-7cac3ec6e922",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 8.0,
+    "unit": "numbers",
+    "details": {
+      "maxNumbers": 8
+    },
+    "is_best": true,
+    "created_at": "2026-10-07T16:10:19.701379+00:00"
+  },
+  {
+    "id": "8ec5c4f1-8503-4b19-bbcb-9950705db409",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 435.0,
+    "unit": "ms/target",
+    "details": {
+      "accuracy": 96
+    },
+    "is_best": true,
+    "created_at": "2026-10-07T16:10:19.701379+00:00"
+  },
+  {
+    "id": "ccb772a4-da42-4829-8a2c-8206e5a36d1c",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:16.771711+00:00"
+  },
+  {
+    "id": "5d9f0042-ec0b-4746-a050-12d919b6176e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": true,
+    "created_at": "2026-10-07T17:08:17.018019+00:00"
+  },
+  {
+    "id": "1eab136f-969a-4799-98e2-4ac345fef65b",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:17.377928+00:00"
+  },
+  {
+    "id": "ec164c35-a2a2-40ef-94d5-0e413a7d4442",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:17.679587+00:00"
+  },
+  {
+    "id": "a6d481b6-79c8-4cd7-bbfd-ec27630716b2",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:18.000700+00:00"
+  },
+  {
+    "id": "68f1ad69-4292-423d-8929-f9c8191b4eb5",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:18.329247+00:00"
+  },
+  {
+    "id": "4022c4b9-e626-4998-956c-652450bfff6e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:18.970071+00:00"
+  },
+  {
+    "id": "32f9a757-c74b-4c2f-9f3e-ad5782f04cf0",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:19.199911+00:00"
+  },
+  {
+    "id": "6e4eea48-4074-4168-8311-26dd982a138a",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:19.442547+00:00"
+  },
+  {
+    "id": "7adf5810-21f2-4f59-bbe6-6f14ee496915",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:19.691913+00:00"
+  },
+  {
+    "id": "aafd11e1-d70f-4a3b-beee-13ebf33f7257",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:19.929406+00:00"
+  },
+  {
+    "id": "9e65ea96-60bc-4134-8d09-b6519fdcf19e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:08:20.242436+00:00"
+  },
+  {
+    "id": "3dcf84e2-1f0a-4619-ae29-24df9927e0c2",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 68.0,
+    "unit": "words",
+    "details": {
+      "wordsSeen": 34
+    },
+    "is_best": false,
+    "created_at": "2026-10-07T17:10:39.578979+00:00"
+  },
+  {
+    "id": "5158e84d-2ccd-4445-b6c9-9e88bcc8854a",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:19.866281+00:00"
+  },
+  {
+    "id": "7299c445-3d98-4967-aa0c-7d359a6a051a",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:20.640029+00:00"
+  },
+  {
+    "id": "83cd8acd-8947-42bc-b3cd-9fe12a2ded64",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:20.978782+00:00"
+  },
+  {
+    "id": "e46a332c-eefd-424b-bcbc-fddee38d68d1",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:21.323865+00:00"
+  },
+  {
+    "id": "3b613cbc-56f8-4eea-853c-7ba9d0ca1c3e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:21.705578+00:00"
+  },
+  {
+    "id": "7522e603-aed1-45de-8cd5-21feaf0fc53b",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:22.129767+00:00"
+  },
+  {
+    "id": "33791a17-5be6-4820-bf55-6ea7383c7ff1",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:22.420119+00:00"
+  },
+  {
+    "id": "04a4e3c3-3dd7-49f3-a3bd-c3d8d0602c1e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:22.768299+00:00"
+  },
+  {
+    "id": "763e7868-9b80-43e1-b364-ad3781d2acf7",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:23.009804+00:00"
+  },
+  {
+    "id": "9fd426b5-eb38-4380-a54e-18b7caab229c",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:23.264547+00:00"
+  },
+  {
+    "id": "a6dad7f9-feaa-4265-bbb5-35d887fd17d1",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:23.655490+00:00"
+  },
+  {
+    "id": "62dac867-eef9-4b65-8789-c2c0499be10e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:23.868945+00:00"
+  },
+  {
+    "id": "1b67bd45-d17d-459a-879b-102aa91c7820",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:53.896493+00:00"
+  },
+  {
+    "id": "656757a1-833c-43ce-82d4-050b2826f8c6",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:54.209854+00:00"
+  },
+  {
+    "id": "9f2a8143-e231-4ff3-af61-21b06f80de41",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:54.459869+00:00"
+  },
+  {
+    "id": "c669ce98-4426-4d55-b0f8-bd0f47ebe02d",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:54.673603+00:00"
+  },
+  {
+    "id": "9df68c18-c046-4c60-a4fb-4d77436f4ce6",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:54.860780+00:00"
+  },
+  {
+    "id": "0590cf90-a7db-47f9-9a0c-9c4e2aa6074d",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:55.168692+00:00"
+  },
+  {
+    "id": "85a9e4e1-66e3-47a6-87d1-bf1e879df861",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:55.489124+00:00"
+  },
+  {
+    "id": "cedefd3f-964e-4217-8b6e-259ff21cb614",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:55.968612+00:00"
+  },
+  {
+    "id": "6288526a-2606-4aaa-b7e7-f48655cde6af",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:56.194025+00:00"
+  },
+  {
+    "id": "be110566-c22c-4ee3-9e55-0737cb3cd59b",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:56.615300+00:00"
+  },
+  {
+    "id": "f1386c59-bfac-4a9a-8e0d-956e86b73b04",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:56.819774+00:00"
+  },
+  {
+    "id": "de96802f-f189-4bd1-907c-b4554cd8c832",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:51:57.089551+00:00"
+  },
+  {
+    "id": "ae7494fe-34a0-438a-adf3-935ddf2b9d17",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:54.235866+00:00"
+  },
+  {
+    "id": "53b2fbb5-b941-4b84-920a-3a8f8ddaf4ae",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:54.644448+00:00"
+  },
+  {
+    "id": "3abbfa5c-5c03-4c5e-a9fa-d87c5a238bef",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:54.866879+00:00"
+  },
+  {
+    "id": "f44b68ff-61df-48ae-8608-e1a9dfbeaf07",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:55.113252+00:00"
+  },
+  {
+    "id": "d6e6837d-bd9e-46d6-80cd-69c0370ec44d",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:55.288936+00:00"
+  },
+  {
+    "id": "b43d2636-c800-4cd0-b8fe-fbcec815ee29",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:55.501720+00:00"
+  },
+  {
+    "id": "78b90e0d-ef59-4bbc-a6e6-fb48818b657a",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:55.714307+00:00"
+  },
+  {
+    "id": "d7434665-eef6-41cc-92c7-1e9199bb4f31",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:55.907303+00:00"
+  },
+  {
+    "id": "90a51d53-1956-4e38-99ca-7a14ef898cea",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:56.124210+00:00"
+  },
+  {
+    "id": "31cfd68b-d67e-4c1d-b94d-c9ed6f9396be",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:56.330764+00:00"
+  },
+  {
+    "id": "6b254ecc-ccd4-4b8e-ae75-6463f1a4e686",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:56.515744+00:00"
+  },
+  {
+    "id": "0d5ffbae-d495-4695-8e02-515579aa9cf3",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:54:56.744274+00:00"
+  },
+  {
+    "id": "bacbad21-049c-4db5-9ed0-c999563e0248",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:55:59.667593+00:00"
+  },
+  {
+    "id": "43f2ae19-5fdd-47a8-a4b0-c2085692d816",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:55:59.899507+00:00"
+  },
+  {
+    "id": "63955b9e-e9f7-4707-ab4d-65932be969fd",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:00.113900+00:00"
+  },
+  {
+    "id": "c353ae47-4c82-474c-bc6e-34f1885b13b3",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:01.773591+00:00"
+  },
+  {
+    "id": "e26e4ee1-009e-43c9-81c4-3e6c4ff7e925",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:03.504543+00:00"
+  },
+  {
+    "id": "217fe055-6e82-4fff-83fd-7eb7915597a2",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:05.965289+00:00"
+  },
+  {
+    "id": "3d8971f2-50c4-4602-ae0b-eb4acb761eae",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "reaction",
+    "score": 265.0,
+    "unit": "ms",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:11.473378+00:00"
+  },
+  {
+    "id": "1abe7905-5f82-4b08-ae4a-0d5594f9bf3e",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "verbal",
+    "score": 96.0,
+    "unit": "words",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:11.728019+00:00"
+  },
+  {
+    "id": "29942bb6-19f1-4435-91d5-053019db8de1",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "number",
+    "score": 2.0,
+    "unit": "digits",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:12.023329+00:00"
+  },
+  {
+    "id": "f290a53a-44e2-43d8-a9e0-b8f001626f40",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "visual",
+    "score": 5.0,
+    "unit": "level",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:12.203286+00:00"
+  },
+  {
+    "id": "abf038ae-a292-4189-881a-d73f1805c532",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "chimp",
+    "score": 6.0,
+    "unit": "numbers",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:12.381655+00:00"
+  },
+  {
+    "id": "3c0cf0ef-055e-436e-b526-0b4644d682cc",
+    "user_id": "fcca0f07-3515-43ae-a85c-46ab549d919f",
+    "test_type": "aim",
+    "score": 2145.0,
+    "unit": "ms/target",
+    "details": {
+      "source": "auto_sync"
+    },
+    "is_best": false,
+    "created_at": "2026-10-09T14:56:12.573697+00:00"
+  }
+]

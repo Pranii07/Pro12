@@ -88,11 +88,11 @@ FEATURE_RANGES = {
     "number_recall_accuracy": (0.3, 1.0, True),
     "pattern_accuracy": (0.3, 1.0, True),
     "avg_response_time_ms": (500, 3500, False),
-    # Reaction — lower reaction times = better
-    "avg_reaction_time_ms": (150, 700, False),
-    "fastest_reaction_ms": (100, 500, False),
-    "slowest_reaction_ms": (200, 1000, False),
-    "false_start_count": (0, 5, False),
+    # Reaction — lower reaction times = better (calibrated to human visual reaction benchmarks)
+    "avg_reaction_time_ms": (220, 620, False),
+    "fastest_reaction_ms": (160, 480, False),
+    "slowest_reaction_ms": (280, 950, False),
+    "false_start_count": (0, 4, False),
     # Speech — higher rate/fluency = better, lower pause = better
     "speech_rate_wpm": (60, 180, True),
     "avg_pause_duration_ms": (100, 1200, False),

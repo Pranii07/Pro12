@@ -238,6 +238,30 @@
     background-color: oklch(0.488 0.200 264 / 0.25);
     color: var(--color-foreground);
   }
+
+  /* Sleek modern scrollbars across all browsers */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.5 0.02 260 / 0.25) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: oklch(0.5 0.02 260 / 0.25);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(0.5 0.02 260 / 0.45);
+  }
 }
 
 /* ============================================================

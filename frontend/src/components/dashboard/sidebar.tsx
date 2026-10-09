@@ -17,6 +17,7 @@ import {
   Shield,
   Users,
   Cpu,
+  Brain,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
@@ -43,12 +44,8 @@ const adminPrimaryNavItems: NavItem[] = [
   { label: 'Admin Console', path: '/dashboard/admin', icon: Shield },
   { label: 'User Management', path: '/dashboard/admin?tab=users', icon: Users },
   { label: 'Assessments', path: '/dashboard/admin?tab=assessments', icon: ClipboardList },
+  { label: 'Lab Surveillance', path: '/dashboard/admin?tab=benchmarks', icon: Brain },
   { label: 'ML & Health', path: '/dashboard/admin?tab=model', icon: Cpu },
-]
-
-const adminClinicalNavItems: NavItem[] = [
-  { label: 'Patient View', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Clinical Reports', path: '/dashboard/reports', icon: FileText },
 ]
 
 // Regular User Navigation (Patients / Screeners)
@@ -56,6 +53,7 @@ const userNavItems: NavItem[] = [
   { label: 'Home', path: '/home', icon: Home },
   { label: 'Overview', path: '/dashboard', icon: LayoutDashboard },
   { label: 'New Assessment', path: '/dashboard/new-assessment', icon: ClipboardList },
+  { label: 'Cognitive Lab', path: '/dashboard/benchmarks', icon: Brain },
   { label: 'History', path: '/dashboard/assessments', icon: History },
   { label: 'Reports', path: '/dashboard/reports', icon: FileText },
 ]
@@ -103,36 +101,21 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <nav className="flex-1 overflow-y-auto p-3 space-y-1">
         {isAdmin ? (
           // ================= ADMIN VIEW =================
-          <>
-            <div className="space-y-1">
-              {!collapsed && (
-                <div className="flex items-center justify-between px-3 py-1.5">
-                  <p className="text-[0.65rem] font-semibold uppercase tracking-widest text-primary">
-                    Administration
-                  </p>
-                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[0.6rem] font-bold text-primary uppercase">
-                    Admin
-                  </span>
-                </div>
-              )}
-              {adminPrimaryNavItems.map((item) => (
-                <NavLink key={item.path} item={item} collapsed={collapsed} active={isActive(item.path)} />
-              ))}
-            </div>
-
-            <Separator className="my-3" />
-
-            <div className="space-y-1">
-              {!collapsed && (
-                <p className="px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-widest text-muted-foreground">
-                  Patient Portal
+          <div className="space-y-1">
+            {!collapsed && (
+              <div className="flex items-center justify-between px-3 py-1.5">
+                <p className="text-[0.65rem] font-semibold uppercase tracking-widest text-primary">
+                  Administration
                 </p>
-              )}
-              {adminClinicalNavItems.map((item) => (
-                <NavLink key={item.path} item={item} collapsed={collapsed} active={isActive(item.path)} />
-              ))}
-            </div>
-          </>
+                <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[0.6rem] font-bold text-primary uppercase">
+                  Admin
+                </span>
+              </div>
+            )}
+            {adminPrimaryNavItems.map((item) => (
+              <NavLink key={item.path} item={item} collapsed={collapsed} active={isActive(item.path)} />
+            ))}
+          </div>
         ) : (
           // ================= REGULAR USER VIEW =================
           <div className="space-y-1">

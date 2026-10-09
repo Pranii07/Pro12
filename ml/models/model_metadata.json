@@ -1,7 +1,7 @@
 {
   "model_name": "SVM",
   "model_version": "1.0.0",
-  "training_date": "2026-09-16T13:44:40.381857+00:00",
+  "training_date": "2026-10-06T15:53:27.932957+00:00",
   "dataset_description": "Synthetic multimodal behavioural dataset (2000 samples). Generated with Gaussian distributions, modality-dropout, and inter-feature noise. NOT real clinical data.",
   "disclaimer": "Research/Educational Prototype — trained and evaluated on synthetic data. Not clinically validated.",
   "n_train_samples": 1600,
@@ -48,11 +48,11 @@
   ],
   "best_model": "SVM",
   "metrics": {
-    "accuracy": 0.9425,
-    "precision_weighted": 0.942,
-    "recall_weighted": 0.9425,
-    "f1_weighted": 0.9421,
-    "roc_auc_weighted": 0.9886,
+    "accuracy": 0.97,
+    "precision_weighted": 0.9703,
+    "recall_weighted": 0.97,
+    "f1_weighted": 0.97,
+    "roc_auc_weighted": 0.9951,
     "confusion_matrix": [
       [
         199,
@@ -60,98 +60,35 @@
         0
       ],
       [
-        8,
-        103,
-        5
+        4,
+        111,
+        1
       ],
       [
         0,
-        7,
-        75
+        4,
+        78
       ]
     ],
     "cv_f1_scores": [
-      0.9448,
-      0.9496,
-      0.9475,
-      0.9398,
-      0.9378
+      0.9649,
+      0.9547,
+      0.9701,
+      0.9573,
+      0.965
     ],
-    "cv_f1_mean": 0.9439,
-    "cv_f1_std": 0.0045,
-    "train_time_seconds": 0.23,
+    "cv_f1_mean": 0.9624,
+    "cv_f1_std": 0.0056,
+    "train_time_seconds": 0.4,
     "feature_importance": null
   },
   "all_model_results": {
     "RandomForest": {
-      "accuracy": 0.9275,
-      "precision_weighted": 0.9271,
-      "recall_weighted": 0.9275,
-      "f1_weighted": 0.927,
-      "roc_auc_weighted": 0.9892,
-      "confusion_matrix": [
-        [
-          198,
-          4,
-          0
-        ],
-        [
-          10,
-          101,
-          5
-        ],
-        [
-          0,
-          10,
-          72
-        ]
-      ],
-      "cv_f1_scores": [
-        0.925,
-        0.9347,
-        0.9275,
-        0.9528,
-        0.95
-      ],
-      "cv_f1_mean": 0.938,
-      "cv_f1_std": 0.0114,
-      "train_time_seconds": 0.43,
-      "feature_importance": {
-        "wpm": 0.012852641911071256,
-        "cpm": 0.012768558190966157,
-        "accuracy": 0.01564584390812547,
-        "backspace_rate": 0.02824731029602754,
-        "avg_hold_time_ms": 0.0291311008942638,
-        "avg_flight_time_ms": 0.042460017398344645,
-        "word_recall_accuracy": 0.028643466743595233,
-        "number_recall_accuracy": 0.02230597573993418,
-        "pattern_accuracy": 0.025274287427571755,
-        "avg_response_time_ms": 0.05912471021960448,
-        "avg_reaction_time_ms": 0.09474985269242896,
-        "fastest_reaction_ms": 0.0989045807464143,
-        "slowest_reaction_ms": 0.10864521396141967,
-        "false_start_count": 0.008146911842728335,
-        "speech_rate_wpm": 0.025184647143332458,
-        "avg_pause_duration_ms": 0.11501427124287542,
-        "fluency_score": 0.035289656233256965,
-        "transcript_word_count": 0.025419511776747426,
-        "blink_rate_per_min": 0.01763380239455039,
-        "avg_head_movement": 0.06591146390124211,
-        "orientation_stability": 0.07746436079499659,
-        "attention_score": 0.04205950247016528,
-        "typing_present": 0.001789068569141291,
-        "memory_present": 0.001118445447379277,
-        "reaction_present": 0.002543760995272893,
-        "speech_present": 0.0020464730851267716,
-        "facial_present": 0.0016245639734174967
-      }
-    },
-    "SVM": {
-      "accuracy": 0.9425,
-      "precision_weighted": 0.942,
-      "recall_weighted": 0.9425,
-      "f1_weighted": 0.9421,
-      "roc_auc_weighted": 0.9886,
+      "accuracy": 0.9525,
+      "precision_weighted": 0.9525,
+      "recall_weighted": 0.9525,
+      "f1_weighted": 0.9524,
+      "roc_auc_weighted": 0.9967,
       "confusion_matrix": [
         [
           199,
@@ -159,9 +96,9 @@
           0
         ],
         [
-          8,
-          103,
-          5
+          6,
+          107,
+          3
         ],
         [
           0,
@@ -170,23 +107,86 @@
         ]
       ],
       "cv_f1_scores": [
-        0.9448,
-        0.9496,
-        0.9475,
-        0.9398,
-        0.9378
+        0.97,
+        0.9551,
+        0.953,
+        0.9578,
+        0.9726
       ],
-      "cv_f1_mean": 0.9439,
-      "cv_f1_std": 0.0045,
-      "train_time_seconds": 0.23,
+      "cv_f1_mean": 0.9617,
+      "cv_f1_std": 0.008,
+      "train_time_seconds": 0.77,
+      "feature_importance": {
+        "wpm": 0.007838297775750926,
+        "cpm": 0.008018247620328494,
+        "accuracy": 0.008787233677305656,
+        "backspace_rate": 0.01545350688655719,
+        "avg_hold_time_ms": 0.01636747901685727,
+        "avg_flight_time_ms": 0.028595789969903813,
+        "word_recall_accuracy": 0.017356483837250414,
+        "number_recall_accuracy": 0.015931734285702475,
+        "pattern_accuracy": 0.015398335909793025,
+        "avg_response_time_ms": 0.03813484610702308,
+        "avg_reaction_time_ms": 0.18822270756135198,
+        "fastest_reaction_ms": 0.15596103759368923,
+        "slowest_reaction_ms": 0.17692018878202892,
+        "false_start_count": 0.02197131296648702,
+        "speech_rate_wpm": 0.016187841365034903,
+        "avg_pause_duration_ms": 0.07315009651642818,
+        "fluency_score": 0.022952260448470024,
+        "transcript_word_count": 0.01627770468102998,
+        "blink_rate_per_min": 0.011705121746557568,
+        "avg_head_movement": 0.04816335859014352,
+        "orientation_stability": 0.0570442562342197,
+        "attention_score": 0.028810749544501083,
+        "typing_present": 0.0011777959281928977,
+        "memory_present": 0.0008328514589183311,
+        "reaction_present": 0.0070394115589674225,
+        "speech_present": 0.0007556605704681494,
+        "facial_present": 0.0009456893670385637
+      }
+    },
+    "SVM": {
+      "accuracy": 0.97,
+      "precision_weighted": 0.9703,
+      "recall_weighted": 0.97,
+      "f1_weighted": 0.97,
+      "roc_auc_weighted": 0.9951,
+      "confusion_matrix": [
+        [
+          199,
+          3,
+          0
+        ],
+        [
+          4,
+          111,
+          1
+        ],
+        [
+          0,
+          4,
+          78
+        ]
+      ],
+      "cv_f1_scores": [
+        0.9649,
+        0.9547,
+        0.9701,
+        0.9573,
+        0.965
+      ],
+      "cv_f1_mean": 0.9624,
+      "cv_f1_std": 0.0056,
+      "train_time_seconds": 0.4,
       "feature_importance": null
     },
     "XGBoost": {
-      "accuracy": 0.9375,
-      "precision_weighted": 0.9374,
-      "recall_weighted": 0.9375,
-      "f1_weighted": 0.9366,
-      "roc_auc_weighted": 0.9922,
+      "accuracy": 0.95,
+      "precision_weighted": 0.9501,
+      "recall_weighted": 0.95,
+      "f1_weighted": 0.9496,
+      "roc_auc_weighted": 0.996,
       "confusion_matrix": [
         [
           201,
@@ -194,9 +194,9 @@
           0
         ],
         [
-          13,
-          100,
-          3
+          9,
+          105,
+          2
         ],
         [
           0,
@@ -205,43 +205,43 @@
         ]
       ],
       "cv_f1_scores": [
-        0.94,
-        0.9447,
-        0.9086,
-        0.9378,
-        0.9525
+        0.9572,
+        0.9525,
+        0.9626,
+        0.9602,
+        0.9749
       ],
-      "cv_f1_mean": 0.9367,
-      "cv_f1_std": 0.0149,
-      "train_time_seconds": 0.61,
+      "cv_f1_mean": 0.9615,
+      "cv_f1_std": 0.0075,
+      "train_time_seconds": 0.93,
       "feature_importance": {
-        "wpm": 0.01311620231717825,
-        "cpm": 0.018714334815740585,
-        "accuracy": 0.018491201102733612,
-        "backspace_rate": 0.02646782249212265,
-        "avg_hold_time_ms": 0.03025251068174839,
-        "avg_flight_time_ms": 0.036996617913246155,
-        "word_recall_accuracy": 0.02226158417761326,
-        "number_recall_accuracy": 0.0256719421595335,
-        "pattern_accuracy": 0.024501778185367584,
-        "avg_response_time_ms": 0.03988207131624222,
-        "avg_reaction_time_ms": 0.08983667939901352,
-        "fastest_reaction_ms": 0.08794344961643219,
-        "slowest_reaction_ms": 0.09369057416915894,
-        "false_start_count": 0.022811833769083023,
-        "speech_rate_wpm": 0.022088726982474327,
-        "avg_pause_duration_ms": 0.14801622927188873,
-        "fluency_score": 0.034194063395261765,
-        "transcript_word_count": 0.023890377953648567,
-        "blink_rate_per_min": 0.019812382757663727,
-        "avg_head_movement": 0.0598265640437603,
-        "orientation_stability": 0.0530732125043869,
-        "attention_score": 0.03406617417931557,
-        "typing_present": 0.00791043508797884,
-        "memory_present": 0.00958145409822464,
-        "reaction_present": 0.013821667060256004,
-        "speech_present": 0.012050791643559933,
-        "facial_present": 0.011029214598238468
+        "wpm": 0.011700441129505634,
+        "cpm": 0.01288420520722866,
+        "accuracy": 0.016226910054683685,
+        "backspace_rate": 0.018132925033569336,
+        "avg_hold_time_ms": 0.017932957038283348,
+        "avg_flight_time_ms": 0.024209223687648773,
+        "word_recall_accuracy": 0.012497213669121265,
+        "number_recall_accuracy": 0.014121593907475471,
+        "pattern_accuracy": 0.011017339304089546,
+        "avg_response_time_ms": 0.023526834324002266,
+        "avg_reaction_time_ms": 0.25627732276916504,
+        "fastest_reaction_ms": 0.11088442802429199,
+        "slowest_reaction_ms": 0.17040707170963287,
+        "false_start_count": 0.03919631615281105,
+        "speech_rate_wpm": 0.014150824397802353,
+        "avg_pause_duration_ms": 0.054001059383153915,
+        "fluency_score": 0.0167646836489439,
+        "transcript_word_count": 0.018855657428503036,
+        "blink_rate_per_min": 0.013181792572140694,
+        "avg_head_movement": 0.03229259327054024,
+        "orientation_stability": 0.02908141538500786,
+        "attention_score": 0.018922533839941025,
+        "typing_present": 0.007067372556775808,
+        "memory_present": 0.01113021932542324,
+        "reaction_present": 0.027322441339492798,
+        "speech_present": 0.006708058062940836,
+        "facial_present": 0.011506536975502968
       }
     }
   },

@@ -54,6 +54,14 @@ const quickActions = [
     bgColor: 'bg-primary/10',
   },
   {
+    title: 'Cognitive Lab',
+    description: 'Practice standardized memory & reflex benchmarks',
+    icon: Brain,
+    path: '/dashboard/benchmarks',
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/10',
+  },
+  {
     title: 'Assessment History',
     description: 'View your past assessments and results',
     icon: History,
@@ -158,6 +166,14 @@ export function DashboardOverviewPage() {
           color: 'text-accent',
           bgColor: 'bg-accent/10',
         },
+        {
+          title: 'Cognitive Lab',
+          description: 'Interactive psychomotor & memory benchmarks',
+          icon: Brain,
+          path: '/dashboard/benchmarks',
+          color: 'text-purple-500',
+          bgColor: 'bg-purple-500/10',
+        },
       ]
     : quickActions
 
@@ -241,7 +257,7 @@ export function DashboardOverviewPage() {
       {/* Quick Actions */}
       <motion.div {...fadeIn} transition={{ delay: 0.15 }}>
         <h2 className="mb-3 text-lg font-semibold">Quick Actions</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {currentQuickActions.map((action) => (
             <Link key={action.path} to={action.path}>
               <Card className="group h-full cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20">

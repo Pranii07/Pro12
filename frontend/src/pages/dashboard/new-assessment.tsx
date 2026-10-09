@@ -57,7 +57,7 @@ export function NewAssessmentPage() {
   }, [abandonAssessment, navigate])
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       {/* Progress Stepper */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}

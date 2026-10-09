@@ -56,7 +56,7 @@ export function CompletionStep({ language, modules, assessmentId, onFinish }: Co
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="mx-auto flex max-w-2xl flex-col items-center gap-6"
+      className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6"
     >
       {/* Success Animation */}
       <motion.div

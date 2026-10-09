@@ -182,7 +182,7 @@ export function AssessmentRunner({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="mx-auto flex max-w-4xl flex-col gap-6"
+      className="mx-auto flex w-full max-w-3xl flex-col gap-6"
     >
       {/* Top Bar — Progress + Module Counter */}
       <div className="space-y-3">

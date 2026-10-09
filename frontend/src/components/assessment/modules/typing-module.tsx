@@ -323,27 +323,27 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-blue-500/20">
+        <Card className="overflow-hidden border border-blue-500/20 shadow-md">
           <div className="h-1.5 bg-blue-500/10" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-blue-500/10">
-                <Keyboard className="size-7 text-blue-500" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-blue-500/10">
+                <Keyboard className="size-6 text-blue-500" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'module.typing')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'module.typing')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'typing.instructions')}
                 </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="rounded-xl bg-muted/50 p-6 space-y-3">
-              <h4 className="font-medium text-sm">{t(language, 'typing.whatWeMessure')}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+          <CardContent className="space-y-5">
+            <div className="rounded-xl bg-muted/50 p-4 sm:p-5 space-y-2.5">
+              <h4 className="font-semibold text-xs sm:text-sm">{t(language, 'typing.whatWeMessure')}</h4>
+              <ul className="space-y-1.5 text-xs sm:text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Gauge className="size-4 text-blue-500" />
                   {t(language, 'typing.metric.speed')}
@@ -363,12 +363,12 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
               </ul>
             </div>
 
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center justify-between gap-3 pt-1">
               <Button
                 id="typing-skip"
                 variant="outline"
                 onClick={onSkip}
-                className="gap-2"
+                className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium"
               >
                 <SkipForward className="size-4" />
                 {t(language, 'runner.skip')}
@@ -376,7 +376,7 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
               <Button
                 id="typing-start"
                 onClick={handleStart}
-                className="gap-2"
+                className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium"
               >
                 <Play className="size-4" />
                 {t(language, 'typing.start')}
@@ -400,15 +400,15 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="mx-auto max-w-2xl space-y-4"
+        className="mx-auto w-full max-w-3xl space-y-4"
       >
         {/* Stats bar */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="font-mono">
+            <Badge variant="outline" className="font-mono text-xs">
               {progress}%
             </Badge>
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground text-xs sm:text-sm">
               {typed.length} / {prompt.length} {t(language, 'typing.chars')}
             </span>
           </div>
@@ -417,19 +417,19 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
             size="sm"
             onClick={handleFinishEarly}
             disabled={typed.length < 10}
-            className="text-xs"
+            className="text-xs h-8"
           >
             {t(language, 'typing.finishEarly')}
           </Button>
         </div>
 
         {/* Prompt display */}
-        <Card className="border-2 border-blue-500/20">
-          <CardContent className="p-6">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <Card className="border border-blue-500/20 shadow-sm">
+          <CardContent className="p-5 sm:p-6">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {t(language, 'typing.prompt')}
             </p>
-            <p className="select-none font-mono text-base leading-relaxed tracking-wide">
+            <p className="select-none font-mono text-sm sm:text-base leading-relaxed tracking-wide">
               {renderPromptChars()}
             </p>
           </CardContent>
@@ -448,14 +448,14 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
-              className="h-28 w-full resize-none rounded-lg border-0 bg-muted/50 p-4 font-mono text-base outline-none ring-1 ring-border focus:ring-2 focus:ring-primary"
+              className="h-28 w-full resize-none rounded-lg border-0 bg-muted/50 p-3.5 font-mono text-sm sm:text-base outline-none ring-1 ring-border focus:ring-2 focus:ring-primary"
               placeholder={t(language, 'typing.placeholder')}
             />
           </CardContent>
         </Card>
 
         {/* Progress bar */}
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
             animate={{ width: `${progress}%` }}
@@ -474,27 +474,27 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="mx-auto max-w-2xl"
+        className="mx-auto w-full max-w-3xl"
       >
-        <Card className="overflow-hidden border-2 border-blue-500/20">
+        <Card className="overflow-hidden border border-blue-500/20 shadow-md">
           <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-400" />
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-success/10">
-                <CheckCircle2 className="size-7 text-success" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3.5">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-success/10">
+                <CheckCircle2 className="size-6 text-success" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-xl">{t(language, 'typing.results.title')}</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <CardTitle className="text-lg font-bold">{t(language, 'typing.results.title')}</CardTitle>
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {t(language, 'typing.results.subtitle')}
                 </p>
               </div>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5">
             {/* Metrics grid */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               <MetricCard
                 label={t(language, 'typing.results.wpm')}
                 value={metrics.wpm.toString()}
@@ -534,18 +534,18 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
             </div>
 
             {/* Time taken */}
-            <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
-              <Clock className="size-4" />
+            <div className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 p-2.5 text-xs text-muted-foreground font-medium">
+              <Clock className="size-3.5" />
               {t(language, 'typing.results.time')}: {metrics.totalTimeSeconds}s
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center justify-between gap-3 pt-1">
               <Button
                 id="typing-retry"
                 variant="outline"
                 onClick={handleReset}
-                className="gap-2"
+                className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium"
               >
                 <RotateCcw className="size-4" />
                 {t(language, 'typing.results.retry')}
@@ -554,7 +554,7 @@ export function TypingModule({ language, onComplete, onSkip }: TypingModuleProps
                 id="typing-submit"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="gap-2"
+                className="gap-2 h-9 sm:h-10 text-xs sm:text-sm font-medium"
               >
                 <CheckCircle2 className="size-4" />
                 {isSubmitting ? t(language, 'typing.results.submitting') : t(language, 'typing.results.submit')}
@@ -585,11 +585,11 @@ function MetricCard({
   color: string
 }) {
   return (
-    <div className="rounded-xl border bg-card p-3 text-center">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={cn('mt-1 text-2xl font-bold tabular-nums', color)}>
+    <div className="rounded-xl border bg-card p-3 text-center shadow-xs">
+      <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">{label}</p>
+      <p className={cn('mt-0.5 text-xl font-bold tabular-nums', color)}>
         {value}
-        {unit && <span className="ml-0.5 text-xs font-normal text-muted-foreground">{unit}</span>}
+        {unit && <span className="ml-1 text-xs font-normal text-muted-foreground">{unit}</span>}
       </p>
     </div>
   )
