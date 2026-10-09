@@ -12,6 +12,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import List
 
+from pydantic import Field, AliasChoices
 from pydantic_settings import BaseSettings
 
 
@@ -30,7 +31,7 @@ class Settings(BaseSettings):
     # FastAPI Server
     # -------------------------------------------------------
     backend_host: str = "0.0.0.0"
-    backend_port: int = 8000
+    backend_port: int = Field(default=8000, validation_alias=AliasChoices("PORT", "BACKEND_PORT"))
     backend_env: str = "development"  # development | staging | production
 
     # -------------------------------------------------------

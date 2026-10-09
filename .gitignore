@@ -42,6 +42,9 @@ env/
 *.onnx
 ml/models/*.joblib
 ml/models/*.pkl
+# Allow lightweight production screening models needed for deployment
+!backend/ml/models/best_model.joblib
+!backend/ml/models/preprocessor.joblib
 ml/datasets/*.csv
 ml/datasets/*.parquet
 ml/datasets/FacialDataSets/

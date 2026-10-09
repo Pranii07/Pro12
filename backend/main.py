@@ -97,6 +97,15 @@ def create_app() -> FastAPI:
     register_exception_handlers(application)
 
     # --- Routers ---
+    from app.api.health import health_check
+    application.add_api_route(
+        "/health",
+        health_check,
+        methods=["GET"],
+        summary="Root Health Check",
+        description="Root convenience health check route mirroring /api/health.",
+        tags=["Health"],
+    )
     application.include_router(api_router)
 
     # --- Startup Event ---
@@ -109,6 +118,25 @@ def create_app() -> FastAPI:
         logger.info(f"  Supabase configured: {bool(settings.supabase_url)}")
         logger.info(f"  JWT secret configured: {bool(settings.supabase_jwt_secret)}")
         logger.info(f"  OpenAPI docs: {'disabled (production)' if settings.is_production else 'enabled'}")
+
+        # Enforce required production configuration fail-fast
+        if settings.is_production:
+            missing_vars: list[str] = []
+            if not settings.supabase_url:
+                missing_vars.append("SUPABASE_URL")
+            if not settings.supabase_service_role_key:
+                missing_vars.append("SUPABASE_SERVICE_ROLE_KEY")
+            if not settings.supabase_jwt_secret:
+                missing_vars.append("SUPABASE_JWT_SECRET")
+
+            if missing_vars:
+                error_msg = (
+                    "CRITICAL: Application startup failed. The following required production "
+                    f"environment variables are missing or empty: {', '.join(missing_vars)}. "
+                    "Please configure them in your Render Web Service dashboard."
+                )
+                logger.critical(error_msg)
+                raise RuntimeError(error_msg)
 
         # Load ML model, preprocessor, and metadata
         ml_loaded = init_model_loader(

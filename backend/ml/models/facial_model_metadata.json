@@ -1,0 +1,225 @@
+{
+  "model_component": "Facial Dynamics & Expression Classifier",
+  "dataset_name": "FacialDataSets (FER2013 subset)",
+  "training_date": "2026-09-26T07:33:27.818955+00:00",
+  "selected_best_model": "RBF SVM (Calibrated)",
+  "classes": [
+    "Angry",
+    "Disgust",
+    "Fear",
+    "Happy",
+    "Neutral"
+  ],
+  "n_samples_total": 2195,
+  "n_train_samples": 1756,
+  "n_test_samples": 439,
+  "feature_dim": 908,
+  "leakage_prevention": "Exact MD5 deduplication + Stratified train/test split. (Subject IDs unavailable in FER2013 distribution).",
+  "model_comparison": {
+    "RBF SVM (Calibrated)": {
+      "model_name": "RBF SVM (Calibrated)",
+      "accuracy": 0.6264,
+      "precision_weighted": 0.6019,
+      "recall_weighted": 0.6264,
+      "f1_weighted": 0.605,
+      "precision_macro": 0.5124,
+      "recall_macro": 0.4564,
+      "f1_macro": 0.469,
+      "confusion_matrix": [
+        [
+          45,
+          2,
+          20,
+          24,
+          6
+        ],
+        [
+          4,
+          1,
+          2,
+          4,
+          0
+        ],
+        [
+          19,
+          1,
+          55,
+          24,
+          6
+        ],
+        [
+          8,
+          0,
+          6,
+          159,
+          3
+        ],
+        [
+          10,
+          0,
+          12,
+          13,
+          15
+        ]
+      ],
+      "cv_f1_mean": 0.5227,
+      "cv_f1_std": 0.0251,
+      "train_time_sec": 10.15,
+      "inference_time_sec": 0.6207
+    },
+    "Random Forest": {
+      "model_name": "Random Forest",
+      "accuracy": 0.5239,
+      "precision_weighted": 0.4878,
+      "recall_weighted": 0.5239,
+      "f1_weighted": 0.4994,
+      "precision_macro": 0.3626,
+      "recall_macro": 0.3544,
+      "f1_macro": 0.3519,
+      "confusion_matrix": [
+        [
+          37,
+          1,
+          26,
+          26,
+          7
+        ],
+        [
+          4,
+          0,
+          3,
+          4,
+          0
+        ],
+        [
+          21,
+          0,
+          43,
+          32,
+          9
+        ],
+        [
+          14,
+          0,
+          19,
+          141,
+          2
+        ],
+        [
+          11,
+          0,
+          13,
+          17,
+          9
+        ]
+      ],
+      "cv_f1_mean": 0.4988,
+      "cv_f1_std": 0.0226,
+      "train_time_sec": 0.53,
+      "inference_time_sec": 0.0313
+    },
+    "Logistic Regression": {
+      "model_name": "Logistic Regression",
+      "accuracy": 0.4533,
+      "precision_weighted": 0.4611,
+      "recall_weighted": 0.4533,
+      "f1_weighted": 0.4563,
+      "precision_macro": 0.3496,
+      "recall_macro": 0.3543,
+      "f1_macro": 0.3506,
+      "confusion_matrix": [
+        [
+          32,
+          3,
+          28,
+          22,
+          12
+        ],
+        [
+          3,
+          1,
+          3,
+          1,
+          3
+        ],
+        [
+          23,
+          1,
+          39,
+          27,
+          15
+        ],
+        [
+          25,
+          3,
+          21,
+          109,
+          18
+        ],
+        [
+          9,
+          2,
+          12,
+          9,
+          18
+        ]
+      ],
+      "cv_f1_mean": 0.4645,
+      "cv_f1_std": 0.0179,
+      "train_time_sec": 0.44,
+      "inference_time_sec": 0.0008
+    },
+    "XGBoost": {
+      "model_name": "XGBoost",
+      "accuracy": 0.5763,
+      "precision_weighted": 0.5474,
+      "recall_weighted": 0.5763,
+      "f1_weighted": 0.532,
+      "precision_macro": 0.444,
+      "recall_macro": 0.3771,
+      "f1_macro": 0.3755,
+      "confusion_matrix": [
+        [
+          33,
+          1,
+          25,
+          36,
+          2
+        ],
+        [
+          3,
+          0,
+          3,
+          5,
+          0
+        ],
+        [
+          19,
+          0,
+          47,
+          37,
+          2
+        ],
+        [
+          6,
+          0,
+          4,
+          165,
+          1
+        ],
+        [
+          11,
+          0,
+          12,
+          19,
+          8
+        ]
+      ],
+      "cv_f1_mean": 0.4775,
+      "cv_f1_std": 0.0266,
+      "train_time_sec": 30.98,
+      "inference_time_sec": 0.0042
+    }
+  },
+  "disclaimer": "This facial analysis model evaluates facial expression categories and symmetry dynamics as part of an educational/research multi-modal screening prototype. It does NOT diagnose Parkinson's disease or any clinical neurological disorder."
+}

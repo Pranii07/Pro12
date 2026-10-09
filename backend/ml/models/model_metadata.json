@@ -1,0 +1,279 @@
+{
+  "model_name": "SVM",
+  "model_version": "1.0.0",
+  "training_date": "2026-10-06T15:53:27.932957+00:00",
+  "dataset_description": "Synthetic multimodal behavioural dataset (2000 samples). Generated with Gaussian distributions, modality-dropout, and inter-feature noise. NOT real clinical data.",
+  "disclaimer": "Research/Educational Prototype — trained and evaluated on synthetic data. Not clinically validated.",
+  "n_train_samples": 1600,
+  "n_test_samples": 400,
+  "n_features": 27,
+  "feature_schema": {
+    "feature_columns": [
+      "wpm",
+      "cpm",
+      "accuracy",
+      "backspace_rate",
+      "avg_hold_time_ms",
+      "avg_flight_time_ms",
+      "word_recall_accuracy",
+      "number_recall_accuracy",
+      "pattern_accuracy",
+      "avg_response_time_ms",
+      "avg_reaction_time_ms",
+      "fastest_reaction_ms",
+      "slowest_reaction_ms",
+      "false_start_count",
+      "speech_rate_wpm",
+      "avg_pause_duration_ms",
+      "fluency_score",
+      "transcript_word_count",
+      "blink_rate_per_min",
+      "avg_head_movement",
+      "orientation_stability",
+      "attention_score"
+    ],
+    "indicator_columns": [
+      "typing_present",
+      "memory_present",
+      "reaction_present",
+      "speech_present",
+      "facial_present"
+    ],
+    "total_input_features": 27
+  },
+  "class_names": [
+    "LOW",
+    "MODERATE",
+    "HIGH"
+  ],
+  "best_model": "SVM",
+  "metrics": {
+    "accuracy": 0.97,
+    "precision_weighted": 0.9703,
+    "recall_weighted": 0.97,
+    "f1_weighted": 0.97,
+    "roc_auc_weighted": 0.9951,
+    "confusion_matrix": [
+      [
+        199,
+        3,
+        0
+      ],
+      [
+        4,
+        111,
+        1
+      ],
+      [
+        0,
+        4,
+        78
+      ]
+    ],
+    "cv_f1_scores": [
+      0.9649,
+      0.9547,
+      0.9701,
+      0.9573,
+      0.965
+    ],
+    "cv_f1_mean": 0.9624,
+    "cv_f1_std": 0.0056,
+    "train_time_seconds": 0.4,
+    "feature_importance": null
+  },
+  "all_model_results": {
+    "RandomForest": {
+      "accuracy": 0.9525,
+      "precision_weighted": 0.9525,
+      "recall_weighted": 0.9525,
+      "f1_weighted": 0.9524,
+      "roc_auc_weighted": 0.9967,
+      "confusion_matrix": [
+        [
+          199,
+          3,
+          0
+        ],
+        [
+          6,
+          107,
+          3
+        ],
+        [
+          0,
+          7,
+          75
+        ]
+      ],
+      "cv_f1_scores": [
+        0.97,
+        0.9551,
+        0.953,
+        0.9578,
+        0.9726
+      ],
+      "cv_f1_mean": 0.9617,
+      "cv_f1_std": 0.008,
+      "train_time_seconds": 0.77,
+      "feature_importance": {
+        "wpm": 0.007838297775750926,
+        "cpm": 0.008018247620328494,
+        "accuracy": 0.008787233677305656,
+        "backspace_rate": 0.01545350688655719,
+        "avg_hold_time_ms": 0.01636747901685727,
+        "avg_flight_time_ms": 0.028595789969903813,
+        "word_recall_accuracy": 0.017356483837250414,
+        "number_recall_accuracy": 0.015931734285702475,
+        "pattern_accuracy": 0.015398335909793025,
+        "avg_response_time_ms": 0.03813484610702308,
+        "avg_reaction_time_ms": 0.18822270756135198,
+        "fastest_reaction_ms": 0.15596103759368923,
+        "slowest_reaction_ms": 0.17692018878202892,
+        "false_start_count": 0.02197131296648702,
+        "speech_rate_wpm": 0.016187841365034903,
+        "avg_pause_duration_ms": 0.07315009651642818,
+        "fluency_score": 0.022952260448470024,
+        "transcript_word_count": 0.01627770468102998,
+        "blink_rate_per_min": 0.011705121746557568,
+        "avg_head_movement": 0.04816335859014352,
+        "orientation_stability": 0.0570442562342197,
+        "attention_score": 0.028810749544501083,
+        "typing_present": 0.0011777959281928977,
+        "memory_present": 0.0008328514589183311,
+        "reaction_present": 0.0070394115589674225,
+        "speech_present": 0.0007556605704681494,
+        "facial_present": 0.0009456893670385637
+      }
+    },
+    "SVM": {
+      "accuracy": 0.97,
+      "precision_weighted": 0.9703,
+      "recall_weighted": 0.97,
+      "f1_weighted": 0.97,
+      "roc_auc_weighted": 0.9951,
+      "confusion_matrix": [
+        [
+          199,
+          3,
+          0
+        ],
+        [
+          4,
+          111,
+          1
+        ],
+        [
+          0,
+          4,
+          78
+        ]
+      ],
+      "cv_f1_scores": [
+        0.9649,
+        0.9547,
+        0.9701,
+        0.9573,
+        0.965
+      ],
+      "cv_f1_mean": 0.9624,
+      "cv_f1_std": 0.0056,
+      "train_time_seconds": 0.4,
+      "feature_importance": null
+    },
+    "XGBoost": {
+      "accuracy": 0.95,
+      "precision_weighted": 0.9501,
+      "recall_weighted": 0.95,
+      "f1_weighted": 0.9496,
+      "roc_auc_weighted": 0.996,
+      "confusion_matrix": [
+        [
+          201,
+          1,
+          0
+        ],
+        [
+          9,
+          105,
+          2
+        ],
+        [
+          0,
+          8,
+          74
+        ]
+      ],
+      "cv_f1_scores": [
+        0.9572,
+        0.9525,
+        0.9626,
+        0.9602,
+        0.9749
+      ],
+      "cv_f1_mean": 0.9615,
+      "cv_f1_std": 0.0075,
+      "train_time_seconds": 0.93,
+      "feature_importance": {
+        "wpm": 0.011700441129505634,
+        "cpm": 0.01288420520722866,
+        "accuracy": 0.016226910054683685,
+        "backspace_rate": 0.018132925033569336,
+        "avg_hold_time_ms": 0.017932957038283348,
+        "avg_flight_time_ms": 0.024209223687648773,
+        "word_recall_accuracy": 0.012497213669121265,
+        "number_recall_accuracy": 0.014121593907475471,
+        "pattern_accuracy": 0.011017339304089546,
+        "avg_response_time_ms": 0.023526834324002266,
+        "avg_reaction_time_ms": 0.25627732276916504,
+        "fastest_reaction_ms": 0.11088442802429199,
+        "slowest_reaction_ms": 0.17040707170963287,
+        "false_start_count": 0.03919631615281105,
+        "speech_rate_wpm": 0.014150824397802353,
+        "avg_pause_duration_ms": 0.054001059383153915,
+        "fluency_score": 0.0167646836489439,
+        "transcript_word_count": 0.018855657428503036,
+        "blink_rate_per_min": 0.013181792572140694,
+        "avg_head_movement": 0.03229259327054024,
+        "orientation_stability": 0.02908141538500786,
+        "attention_score": 0.018922533839941025,
+        "typing_present": 0.007067372556775808,
+        "memory_present": 0.01113021932542324,
+        "reaction_present": 0.027322441339492798,
+        "speech_present": 0.006708058062940836,
+        "facial_present": 0.011506536975502968
+      }
+    }
+  },
+  "hyperparameters": {
+    "RandomForest": {
+      "n_estimators": 200,
+      "max_depth": 12,
+      "min_samples_split": 5,
+      "min_samples_leaf": 2,
+      "class_weight": "balanced"
+    },
+    "SVM": {
+      "kernel": "rbf",
+      "C": 10.0,
+      "gamma": "scale",
+      "class_weight": "balanced"
+    },
+    "XGBoost": {
+      "n_estimators": 200,
+      "max_depth": 8,
+      "learning_rate": 0.1,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8
+    }
+  },
+  "preprocessing": {
+    "imputation": "Median (from training data) for missing modalities",
+    "outlier_handling": "IQR × 1.5 capping",
+    "scaling": "StandardScaler (zero mean, unit variance)",
+    "missing_modality_strategy": "Each module contributes a fixed-size feature block + binary indicator. Missing modules: impute with median from training data, indicator = 0. Training data includes randomized modality-dropout."
+  },
+  "random_seed": 42,
+  "test_size": 0.2,
+  "cv_folds": 5
+}
